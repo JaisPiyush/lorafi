@@ -1,0 +1,190 @@
+{
+    "hints": {
+        "set_portal_asset_data(asset,account)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "set_market_token(asset,asset,account)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "set_usdt_token(asset,account)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "create_asa(string,string,string)uint64": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "mint(asset,uint64,account)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        }
+    },
+    "source": {
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMQp0eG4gTnVtQXBwQXJncwppbnRjXzAgLy8gMAo9PQpibnogbWFpbl9sMTIKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHg4ZjAyZjFhNyAvLyAic2V0X3BvcnRhbF9hc3NldF9kYXRhKGFzc2V0LGFjY291bnQpdm9pZCIKPT0KYm56IG1haW5fbDExCnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4MWExYjhlOTQgLy8gInNldF9tYXJrZXRfdG9rZW4oYXNzZXQsYXNzZXQsYWNjb3VudCl2b2lkIgo9PQpibnogbWFpbl9sMTAKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHg2YzNjN2U1NSAvLyAic2V0X3VzZHRfdG9rZW4oYXNzZXQsYWNjb3VudCl2b2lkIgo9PQpibnogbWFpbl9sOQp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDA1OGE4MDZhIC8vICJjcmVhdGVfYXNhKHN0cmluZyxzdHJpbmcsc3RyaW5nKXVpbnQ2NCIKPT0KYm56IG1haW5fbDgKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHhiODcyZjk2ZCAvLyAibWludChhc3NldCx1aW50NjQsYWNjb3VudCl2b2lkIgo9PQpibnogbWFpbl9sNwplcnIKbWFpbl9sNzoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiBtaW50Y2FzdGVyXzEwCmludGNfMSAvLyAxCnJldHVybgptYWluX2w4Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIGNyZWF0ZWFzYWNhc3Rlcl85CmludGNfMSAvLyAxCnJldHVybgptYWluX2w5Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIHNldHVzZHR0b2tlbmNhc3Rlcl84CmludGNfMSAvLyAxCnJldHVybgptYWluX2wxMDoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiBzZXRtYXJrZXR0b2tlbmNhc3Rlcl83CmludGNfMSAvLyAxCnJldHVybgptYWluX2wxMToKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiBzZXRwb3J0YWxhc3NldGRhdGFjYXN0ZXJfNgppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sMTI6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KYm56IG1haW5fbDE0CmVycgptYWluX2wxNDoKdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKPT0KYXNzZXJ0CmludGNfMSAvLyAxCnJldHVybgoKLy8gc2V0X3BvcnRhbF9hc3NldF9kYXRhCnNldHBvcnRhbGFzc2V0ZGF0YV8wOgpwcm90byAyIDAKdHhuIFNlbmRlcgpnbG9iYWwgQ3JlYXRvckFkZHJlc3MKPT0KLy8gdW5hdXRob3JpemVkCmFzc2VydApwdXNoYnl0ZXMgMHg3MDZmNzI3NDYxNjI2YzY1NWY2MTczNzM2NTc0NWY2OTY0IC8vICJwb3J0YWJsZV9hc3NldF9pZCIKZnJhbWVfZGlnIC0yCnR4bmFzIEFzc2V0cwphcHBfZ2xvYmFsX3B1dApwdXNoYnl0ZXMgMHg3MDZmNzI3NDYxNmM1ZjYxNzM3MzY1NzQ1ZjYzNmY2ZDZkNjE2ZTY0NjU3MiAvLyAicG9ydGFsX2Fzc2V0X2NvbW1hbmRlciIKZnJhbWVfZGlnIC0xCnR4bmFzIEFjY291bnRzCmFwcF9nbG9iYWxfcHV0CnJldHN1YgoKLy8gc2V0X21hcmtldF90b2tlbgpzZXRtYXJrZXR0b2tlbl8xOgpwcm90byAzIDAKdHhuIFNlbmRlcgpnbG9iYWwgQ3JlYXRvckFkZHJlc3MKPT0KLy8gdW5hdXRob3JpemVkCmFzc2VydApwdXNoYnl0ZXMgMHg3MDcyNjk2ZTYzNjk3MDYxNmM1Zjc0NmY2YjY1NmU1ZjY5NjQgLy8gInByaW5jaXBhbF90b2tlbl9pZCIKZnJhbWVfZGlnIC0zCnR4bmFzIEFzc2V0cwphcHBfZ2xvYmFsX3B1dApwdXNoYnl0ZXMgMHg3OTY5NjU2YzY0NWY3NDZmNmI2NTZlNWY2OTY0IC8vICJ5aWVsZF90b2tlbl9pZCIKZnJhbWVfZGlnIC0yCnR4bmFzIEFzc2V0cwphcHBfZ2xvYmFsX3B1dApwdXNoYnl0ZXMgMHg2ZDYxNzI2YjY1NzQ1Zjc0NmY2YjY1NmU1ZjYzNmY2ZDZkNjE2ZTY0NjU3MiAvLyAibWFya2V0X3Rva2VuX2NvbW1hbmRlciIKZnJhbWVfZGlnIC0xCnR4bmFzIEFjY291bnRzCmFwcF9nbG9iYWxfcHV0CnJldHN1YgoKLy8gc2V0X3VzZHRfdG9rZW4Kc2V0dXNkdHRva2VuXzI6CnByb3RvIDIgMAp0eG4gU2VuZGVyCmdsb2JhbCBDcmVhdG9yQWRkcmVzcwo9PQovLyB1bmF1dGhvcml6ZWQKYXNzZXJ0CnB1c2hieXRlcyAweDc1NzM2NDc0NWY3NDZmNmI2NTZlNWY2OTY0IC8vICJ1c2R0X3Rva2VuX2lkIgpmcmFtZV9kaWcgLTIKdHhuYXMgQXNzZXRzCmFwcF9nbG9iYWxfcHV0CnB1c2hieXRlcyAweDc1NzM2NDc0NWY3NDZmNmI2NTZlNWY2MzZmNmQ2ZDYxNmU2NDY1NzIgLy8gInVzZHRfdG9rZW5fY29tbWFuZGVyIgpmcmFtZV9kaWcgLTEKdHhuYXMgQWNjb3VudHMKYXBwX2dsb2JhbF9wdXQKcmV0c3ViCgovLyBjcmVhdGVfYXNhCmNyZWF0ZWFzYV8zOgpwcm90byAzIDEKaW50Y18wIC8vIDAKdHhuIFNlbmRlcgpnbG9iYWwgQ3JlYXRvckFkZHJlc3MKPT0KLy8gdW5hdXRob3JpemVkCmFzc2VydAppdHhuX2JlZ2luCnB1c2hpbnQgMyAvLyBhY2ZnCml0eG5fZmllbGQgVHlwZUVudW0KcHVzaGludCAxODQ0Njc0NDA3MzcwOTU1MTYxNSAvLyAxODQ0Njc0NDA3MzcwOTU1MTYxNQppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0VG90YWwKaW50Y18wIC8vIDAKaXR4bl9maWVsZCBDb25maWdBc3NldERlY2ltYWxzCmludGNfMSAvLyAxCml0eG5fZmllbGQgQ29uZmlnQXNzZXREZWZhdWx0RnJvemVuCmZyYW1lX2RpZyAtMgpleHRyYWN0IDIgMAppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0VW5pdE5hbWUKZnJhbWVfZGlnIC0zCmV4dHJhY3QgMiAwCml0eG5fZmllbGQgQ29uZmlnQXNzZXROYW1lCmZyYW1lX2RpZyAtMQpleHRyYWN0IDIgMAppdHhuX2ZpZWxkIENvbmZpZ0Fzc2V0VVJMCmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCml0eG5fZmllbGQgQ29uZmlnQXNzZXRNYW5hZ2VyCmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCml0eG5fZmllbGQgQ29uZmlnQXNzZXRSZXNlcnZlCmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCml0eG5fZmllbGQgQ29uZmlnQXNzZXRGcmVlemUKZ2xvYmFsIEN1cnJlbnRBcHBsaWNhdGlvbkFkZHJlc3MKaXR4bl9maWVsZCBDb25maWdBc3NldENsYXdiYWNrCml0eG5fc3VibWl0Cml0eG4gQ3JlYXRlZEFzc2V0SUQKZnJhbWVfYnVyeSAwCnJldHN1YgoKLy8gYXNhX21pbnRfaW5uZXJfdHhuCmFzYW1pbnRpbm5lcnR4bl80Ogpwcm90byAzIDAKaXR4bl9iZWdpbgpwdXNoaW50IDQgLy8gYXhmZXIKaXR4bl9maWVsZCBUeXBlRW51bQpmcmFtZV9kaWcgLTMKdHhuYXMgQXNzZXRzCml0eG5fZmllbGQgWGZlckFzc2V0CmZyYW1lX2RpZyAtMQppdHhuX2ZpZWxkIEFzc2V0QW1vdW50Cmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCml0eG5fZmllbGQgQXNzZXRTZW5kZXIKZnJhbWVfZGlnIC0yCnR4bmFzIEFjY291bnRzCml0eG5fZmllbGQgQXNzZXRSZWNlaXZlcgppdHhuX3N1Ym1pdApyZXRzdWIKCi8vIG1pbnQKbWludF81Ogpwcm90byAzIDAKZnJhbWVfZGlnIC0zCmZyYW1lX2RpZyAtMQpmcmFtZV9kaWcgLTIKY2FsbHN1YiBhc2FtaW50aW5uZXJ0eG5fNApyZXRzdWIKCi8vIHNldF9wb3J0YWxfYXNzZXRfZGF0YV9jYXN0ZXIKc2V0cG9ydGFsYXNzZXRkYXRhY2FzdGVyXzY6CnByb3RvIDAgMAppbnRjXzAgLy8gMApkdXAKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQppbnRjXzAgLy8gMApnZXRieXRlCmZyYW1lX2J1cnkgMAp0eG5hIEFwcGxpY2F0aW9uQXJncyAyCmludGNfMCAvLyAwCmdldGJ5dGUKZnJhbWVfYnVyeSAxCmZyYW1lX2RpZyAwCmZyYW1lX2RpZyAxCmNhbGxzdWIgc2V0cG9ydGFsYXNzZXRkYXRhXzAKcmV0c3ViCgovLyBzZXRfbWFya2V0X3Rva2VuX2Nhc3RlcgpzZXRtYXJrZXR0b2tlbmNhc3Rlcl83Ogpwcm90byAwIDAKaW50Y18wIC8vIDAKZHVwbiAyCnR4bmEgQXBwbGljYXRpb25BcmdzIDEKaW50Y18wIC8vIDAKZ2V0Ynl0ZQpmcmFtZV9idXJ5IDAKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgppbnRjXzAgLy8gMApnZXRieXRlCmZyYW1lX2J1cnkgMQp0eG5hIEFwcGxpY2F0aW9uQXJncyAzCmludGNfMCAvLyAwCmdldGJ5dGUKZnJhbWVfYnVyeSAyCmZyYW1lX2RpZyAwCmZyYW1lX2RpZyAxCmZyYW1lX2RpZyAyCmNhbGxzdWIgc2V0bWFya2V0dG9rZW5fMQpyZXRzdWIKCi8vIHNldF91c2R0X3Rva2VuX2Nhc3RlcgpzZXR1c2R0dG9rZW5jYXN0ZXJfODoKcHJvdG8gMCAwCmludGNfMCAvLyAwCmR1cAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmludGNfMCAvLyAwCmdldGJ5dGUKZnJhbWVfYnVyeSAwCnR4bmEgQXBwbGljYXRpb25BcmdzIDIKaW50Y18wIC8vIDAKZ2V0Ynl0ZQpmcmFtZV9idXJ5IDEKZnJhbWVfZGlnIDAKZnJhbWVfZGlnIDEKY2FsbHN1YiBzZXR1c2R0dG9rZW5fMgpyZXRzdWIKCi8vIGNyZWF0ZV9hc2FfY2FzdGVyCmNyZWF0ZWFzYWNhc3Rlcl85Ogpwcm90byAwIDAKaW50Y18wIC8vIDAKcHVzaGJ5dGVzIDB4IC8vICIiCmR1cG4gMgp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmZyYW1lX2J1cnkgMQp0eG5hIEFwcGxpY2F0aW9uQXJncyAyCmZyYW1lX2J1cnkgMgp0eG5hIEFwcGxpY2F0aW9uQXJncyAzCmZyYW1lX2J1cnkgMwpmcmFtZV9kaWcgMQpmcmFtZV9kaWcgMgpmcmFtZV9kaWcgMwpjYWxsc3ViIGNyZWF0ZWFzYV8zCmZyYW1lX2J1cnkgMApwdXNoYnl0ZXMgMHgxNTFmN2M3NSAvLyAweDE1MWY3Yzc1CmZyYW1lX2RpZyAwCml0b2IKY29uY2F0CmxvZwpyZXRzdWIKCi8vIG1pbnRfY2FzdGVyCm1pbnRjYXN0ZXJfMTA6CnByb3RvIDAgMAppbnRjXzAgLy8gMApkdXBuIDIKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQppbnRjXzAgLy8gMApnZXRieXRlCmZyYW1lX2J1cnkgMAp0eG5hIEFwcGxpY2F0aW9uQXJncyAyCmJ0b2kKZnJhbWVfYnVyeSAxCnR4bmEgQXBwbGljYXRpb25BcmdzIDMKaW50Y18wIC8vIDAKZ2V0Ynl0ZQpmcmFtZV9idXJ5IDIKZnJhbWVfZGlnIDAKZnJhbWVfZGlnIDEKZnJhbWVfZGlnIDIKY2FsbHN1YiBtaW50XzUKcmV0c3Vi",
+        "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
+    },
+    "state": {
+        "global": {
+            "num_byte_slices": 3,
+            "num_uints": 4
+        },
+        "local": {
+            "num_byte_slices": 0,
+            "num_uints": 0
+        }
+    },
+    "schema": {
+        "global": {
+            "declared": {
+                "market_token_commander": {
+                    "type": "bytes",
+                    "key": "market_token_commander",
+                    "descr": ""
+                },
+                "portable_asset_id": {
+                    "type": "uint64",
+                    "key": "portable_asset_id",
+                    "descr": ""
+                },
+                "portal_asset_commander": {
+                    "type": "bytes",
+                    "key": "portal_asset_commander",
+                    "descr": ""
+                },
+                "principal_token_id": {
+                    "type": "uint64",
+                    "key": "principal_token_id",
+                    "descr": ""
+                },
+                "usdt_token_commander": {
+                    "type": "bytes",
+                    "key": "usdt_token_commander",
+                    "descr": ""
+                },
+                "usdt_token_id": {
+                    "type": "uint64",
+                    "key": "usdt_token_id",
+                    "descr": ""
+                },
+                "yield_token_id": {
+                    "type": "uint64",
+                    "key": "yield_token_id",
+                    "descr": ""
+                }
+            },
+            "reserved": {}
+        },
+        "local": {
+            "declared": {},
+            "reserved": {}
+        }
+    },
+    "contract": {
+        "name": "reserve",
+        "methods": [
+            {
+                "name": "set_portal_asset_data",
+                "args": [
+                    {
+                        "type": "asset",
+                        "name": "asset"
+                    },
+                    {
+                        "type": "account",
+                        "name": "commander"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "set_market_token",
+                "args": [
+                    {
+                        "type": "asset",
+                        "name": "principal_token"
+                    },
+                    {
+                        "type": "asset",
+                        "name": "yield_token"
+                    },
+                    {
+                        "type": "account",
+                        "name": "commander"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "set_usdt_token",
+                "args": [
+                    {
+                        "type": "asset",
+                        "name": "asset"
+                    },
+                    {
+                        "type": "account",
+                        "name": "commander"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "create_asa",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "name"
+                    },
+                    {
+                        "type": "string",
+                        "name": "unit_name"
+                    },
+                    {
+                        "type": "string",
+                        "name": "url"
+                    }
+                ],
+                "returns": {
+                    "type": "uint64"
+                }
+            },
+            {
+                "name": "mint",
+                "args": [
+                    {
+                        "type": "asset",
+                        "name": "asset"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "asset_amount"
+                    },
+                    {
+                        "type": "account",
+                        "name": "asset_receiver"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            }
+        ],
+        "networks": {}
+    },
+    "bare_call_config": {
+        "no_op": "CREATE"
+    }
+}

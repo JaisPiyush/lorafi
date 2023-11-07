@@ -1,0 +1,331 @@
+#pragma version 8
+intcblock 0 1
+txn NumAppArgs
+intc_0 // 0
+==
+bnz main_l12
+txna ApplicationArgs 0
+pushbytes 0x8f02f1a7 // "set_portal_asset_data(asset,account)void"
+==
+bnz main_l11
+txna ApplicationArgs 0
+pushbytes 0x1a1b8e94 // "set_market_token(asset,asset,account)void"
+==
+bnz main_l10
+txna ApplicationArgs 0
+pushbytes 0x6c3c7e55 // "set_usdt_token(asset,account)void"
+==
+bnz main_l9
+txna ApplicationArgs 0
+pushbytes 0x058a806a // "create_asa(string,string,string)uint64"
+==
+bnz main_l8
+txna ApplicationArgs 0
+pushbytes 0xb872f96d // "mint(asset,uint64,account)void"
+==
+bnz main_l7
+err
+main_l7:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub mintcaster_10
+intc_1 // 1
+return
+main_l8:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub createasacaster_9
+intc_1 // 1
+return
+main_l9:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setusdttokencaster_8
+intc_1 // 1
+return
+main_l10:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setmarkettokencaster_7
+intc_1 // 1
+return
+main_l11:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setportalassetdatacaster_6
+intc_1 // 1
+return
+main_l12:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l14
+err
+main_l14:
+txn ApplicationID
+intc_0 // 0
+==
+assert
+intc_1 // 1
+return
+
+// set_portal_asset_data
+setportalassetdata_0:
+proto 2 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+pushbytes 0x706f727461626c655f61737365745f6964 // "portable_asset_id"
+frame_dig -2
+txnas Assets
+app_global_put
+pushbytes 0x706f7274616c5f61737365745f636f6d6d616e646572 // "portal_asset_commander"
+frame_dig -1
+txnas Accounts
+app_global_put
+retsub
+
+// set_market_token
+setmarkettoken_1:
+proto 3 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+pushbytes 0x7072696e636970616c5f746f6b656e5f6964 // "principal_token_id"
+frame_dig -3
+txnas Assets
+app_global_put
+pushbytes 0x7969656c645f746f6b656e5f6964 // "yield_token_id"
+frame_dig -2
+txnas Assets
+app_global_put
+pushbytes 0x6d61726b65745f746f6b656e5f636f6d6d616e646572 // "market_token_commander"
+frame_dig -1
+txnas Accounts
+app_global_put
+retsub
+
+// set_usdt_token
+setusdttoken_2:
+proto 2 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+pushbytes 0x757364745f746f6b656e5f6964 // "usdt_token_id"
+frame_dig -2
+txnas Assets
+app_global_put
+pushbytes 0x757364745f746f6b656e5f636f6d6d616e646572 // "usdt_token_commander"
+frame_dig -1
+txnas Accounts
+app_global_put
+retsub
+
+// create_asa
+createasa_3:
+proto 3 1
+intc_0 // 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+itxn_begin
+pushint 3 // acfg
+itxn_field TypeEnum
+pushint 18446744073709551615 // 18446744073709551615
+itxn_field ConfigAssetTotal
+intc_0 // 0
+itxn_field ConfigAssetDecimals
+intc_1 // 1
+itxn_field ConfigAssetDefaultFrozen
+frame_dig -2
+extract 2 0
+itxn_field ConfigAssetUnitName
+frame_dig -3
+extract 2 0
+itxn_field ConfigAssetName
+frame_dig -1
+extract 2 0
+itxn_field ConfigAssetURL
+global CurrentApplicationAddress
+itxn_field ConfigAssetManager
+global CurrentApplicationAddress
+itxn_field ConfigAssetReserve
+global CurrentApplicationAddress
+itxn_field ConfigAssetFreeze
+global CurrentApplicationAddress
+itxn_field ConfigAssetClawback
+itxn_submit
+itxn CreatedAssetID
+frame_bury 0
+retsub
+
+// asa_mint_inner_txn
+asamintinnertxn_4:
+proto 3 0
+itxn_begin
+pushint 4 // axfer
+itxn_field TypeEnum
+frame_dig -3
+txnas Assets
+itxn_field XferAsset
+frame_dig -1
+itxn_field AssetAmount
+global CurrentApplicationAddress
+itxn_field AssetSender
+frame_dig -2
+txnas Accounts
+itxn_field AssetReceiver
+itxn_submit
+retsub
+
+// mint
+mint_5:
+proto 3 0
+frame_dig -3
+frame_dig -1
+frame_dig -2
+callsub asamintinnertxn_4
+retsub
+
+// set_portal_asset_data_caster
+setportalassetdatacaster_6:
+proto 0 0
+intc_0 // 0
+dup
+txna ApplicationArgs 1
+intc_0 // 0
+getbyte
+frame_bury 0
+txna ApplicationArgs 2
+intc_0 // 0
+getbyte
+frame_bury 1
+frame_dig 0
+frame_dig 1
+callsub setportalassetdata_0
+retsub
+
+// set_market_token_caster
+setmarkettokencaster_7:
+proto 0 0
+intc_0 // 0
+dupn 2
+txna ApplicationArgs 1
+intc_0 // 0
+getbyte
+frame_bury 0
+txna ApplicationArgs 2
+intc_0 // 0
+getbyte
+frame_bury 1
+txna ApplicationArgs 3
+intc_0 // 0
+getbyte
+frame_bury 2
+frame_dig 0
+frame_dig 1
+frame_dig 2
+callsub setmarkettoken_1
+retsub
+
+// set_usdt_token_caster
+setusdttokencaster_8:
+proto 0 0
+intc_0 // 0
+dup
+txna ApplicationArgs 1
+intc_0 // 0
+getbyte
+frame_bury 0
+txna ApplicationArgs 2
+intc_0 // 0
+getbyte
+frame_bury 1
+frame_dig 0
+frame_dig 1
+callsub setusdttoken_2
+retsub
+
+// create_asa_caster
+createasacaster_9:
+proto 0 0
+intc_0 // 0
+pushbytes 0x // ""
+dupn 2
+txna ApplicationArgs 1
+frame_bury 1
+txna ApplicationArgs 2
+frame_bury 2
+txna ApplicationArgs 3
+frame_bury 3
+frame_dig 1
+frame_dig 2
+frame_dig 3
+callsub createasa_3
+frame_bury 0
+pushbytes 0x151f7c75 // 0x151f7c75
+frame_dig 0
+itob
+concat
+log
+retsub
+
+// mint_caster
+mintcaster_10:
+proto 0 0
+intc_0 // 0
+dupn 2
+txna ApplicationArgs 1
+intc_0 // 0
+getbyte
+frame_bury 0
+txna ApplicationArgs 2
+btoi
+frame_bury 1
+txna ApplicationArgs 3
+intc_0 // 0
+getbyte
+frame_bury 2
+frame_dig 0
+frame_dig 1
+frame_dig 2
+callsub mint_5
+retsub

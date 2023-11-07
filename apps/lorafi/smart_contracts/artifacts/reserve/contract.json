@@ -1,0 +1,98 @@
+{
+    "name": "reserve",
+    "methods": [
+        {
+            "name": "set_portal_asset_data",
+            "args": [
+                {
+                    "type": "asset",
+                    "name": "asset"
+                },
+                {
+                    "type": "account",
+                    "name": "commander"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "set_market_token",
+            "args": [
+                {
+                    "type": "asset",
+                    "name": "principal_token"
+                },
+                {
+                    "type": "asset",
+                    "name": "yield_token"
+                },
+                {
+                    "type": "account",
+                    "name": "commander"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "set_usdt_token",
+            "args": [
+                {
+                    "type": "asset",
+                    "name": "asset"
+                },
+                {
+                    "type": "account",
+                    "name": "commander"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "create_asa",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "name"
+                },
+                {
+                    "type": "string",
+                    "name": "unit_name"
+                },
+                {
+                    "type": "string",
+                    "name": "url"
+                }
+            ],
+            "returns": {
+                "type": "uint64"
+            }
+        },
+        {
+            "name": "mint",
+            "args": [
+                {
+                    "type": "asset",
+                    "name": "asset"
+                },
+                {
+                    "type": "uint64",
+                    "name": "asset_amount"
+                },
+                {
+                    "type": "account",
+                    "name": "asset_receiver"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        }
+    ],
+    "networks": {}
+}
