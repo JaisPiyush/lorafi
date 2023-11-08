@@ -83,12 +83,12 @@ def create_asa(
 
 @pt.Subroutine(pt.TealType.none)
 def asa_mint_inner_txn(
-    asset: pt.abi.Asset, receiver: pt.abi.Account, amount: abi.Uint64
+    asset_id: Expr, receiver: pt.abi.Account, amount: abi.Uint64
 ) -> Expr:
     return pt.InnerTxnBuilder.Execute(
         {
             TxnField.type_enum: TxnType.AssetTransfer,
-            TxnField.xfer_asset: asset.asset_id(),
+            TxnField.xfer_asset: asset_id,
             TxnField.asset_amount: amount.get(),
             TxnField.asset_sender: pt.Global.current_application_address(),
             TxnField.asset_receiver: receiver.address(),
@@ -97,9 +97,36 @@ def asa_mint_inner_txn(
 
 
 @app.external
-def mint(asset: abi.Asset, asset_amount: pt.abi.Uint64, asset_receiver: pt.abi.Account):
+def mint_yield_token_pair(
+    principal_amount: abi.Uint64, yield_amount: abi.Uint64, to: abi.Account
+):
     return pt.Seq(
-        [
-            asa_mint_inner_txn(asset, asset_receiver, asset_amount),
-        ]
+        pt.Assert(
+            pt.Txn.sender() == app.state.market_token_commander.get(),
+            comment="Cannot mint token",
+        ),
+        asa_mint_inner_txn(app.state.principal_token_id.get(), to, principal_amount),
+        asa_mint_inner_txn(app.state.yield_token_id.get(), to, yield_amount),
+    )
+
+
+@app.external
+def mint_portable_token(amount: abi.Uint64, to: abi.Account):
+    return pt.Seq(
+        pt.Assert(
+            pt.Txn.sender() == app.state.portal_asset_commander.get(),
+            comment="cannot mint token",
+        ),
+        asa_mint_inner_txn(app.state.portable_asset_id.get(), to, amount),
+    )
+
+
+@app.external
+def mint_usdt_token(amount: abi.Uint64, to: abi.Account):
+    return pt.Seq(
+        pt.Assert(
+            pt.Txn.sender() == app.state.usdt_token_commander.get(),
+            comment="cannot mint token",
+        ),
+        asa_mint_inner_txn(app.state.usdt_token_id.get(), to, amount),
     )

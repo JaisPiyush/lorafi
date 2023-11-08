@@ -67,7 +67,7 @@ def get_lp_token_asset(*, output: abi.Uint64) -> Expr:
     return Seq(output.set(app.state.lp_asset_id.get()))
 
 
-# TODO: Fix right now it assumes order of asset is consistent with state
+# TODO: (Fix) right now it assumes order of asset is consistent with state
 @pt.Subroutine(TealType.none)
 def pre_condition_asset_check(asset_1: Expr, asset_2: Expr) -> Expr:
     return Seq(

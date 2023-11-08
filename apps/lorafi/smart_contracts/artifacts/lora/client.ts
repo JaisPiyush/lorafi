@@ -27,20 +27,30 @@ import type { TransactionWithSigner } from 'algosdk'
 import { Algodv2, OnApplicationComplete, Transaction, AtomicTransactionComposer } from 'algosdk'
 export const APP_SPEC: AppSpec = {
   "hints": {
-    "hello(string)string": {
+    "update_rate(uint64)void": {
+      "call_config": {
+        "no_op": "CALL"
+      }
+    },
+    "configure(application,asset,account)void": {
+      "call_config": {
+        "no_op": "CALL"
+      }
+    },
+    "mint(axfer,account)void": {
       "call_config": {
         "no_op": "CALL"
       }
     }
   },
   "source": {
-    "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMQpieXRlY2Jsb2NrIDB4CnR4biBOdW1BcHBBcmdzCmludGNfMCAvLyAwCj09CmJueiBtYWluX2w0CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4MDJiZWNlMTEgLy8gImhlbGxvKHN0cmluZylzdHJpbmciCj09CmJueiBtYWluX2wzCmVycgptYWluX2wzOgp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIGhlbGxvY2FzdGVyXzEKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDQ6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KYm56IG1haW5fbDYKZXJyCm1haW5fbDY6CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCj09CmFzc2VydAppbnRjXzEgLy8gMQpyZXR1cm4KCi8vIGhlbGxvCmhlbGxvXzA6CnByb3RvIDEgMQpieXRlY18wIC8vICIiCnB1c2hieXRlcyAweDQ4NjU2YzZjNmYyYzIwIC8vICJIZWxsbywgIgpmcmFtZV9kaWcgLTEKZXh0cmFjdCAyIDAKY29uY2F0CmZyYW1lX2J1cnkgMApmcmFtZV9kaWcgMApsZW4KaXRvYgpleHRyYWN0IDYgMApmcmFtZV9kaWcgMApjb25jYXQKZnJhbWVfYnVyeSAwCnJldHN1YgoKLy8gaGVsbG9fY2FzdGVyCmhlbGxvY2FzdGVyXzE6CnByb3RvIDAgMApieXRlY18wIC8vICIiCmR1cAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmZyYW1lX2J1cnkgMQpmcmFtZV9kaWcgMQpjYWxsc3ViIGhlbGxvXzAKZnJhbWVfYnVyeSAwCnB1c2hieXRlcyAweDE1MWY3Yzc1IC8vIDB4MTUxZjdjNzUKZnJhbWVfZGlnIDAKY29uY2F0CmxvZwpyZXRzdWI=",
+    "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMSA0CmJ5dGVjYmxvY2sgMHg3MjYxNzQ2NTVmNmY3MjYxNjM2YzY1IDB4NjE3MzczNjU3NDVmNjk2NAp0eG4gTnVtQXBwQXJncwppbnRjXzAgLy8gMAo9PQpibnogbWFpbl9sOAp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDAyNjU5ZjQ4IC8vICJ1cGRhdGVfcmF0ZSh1aW50NjQpdm9pZCIKPT0KYm56IG1haW5fbDcKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHhmODE4NjM3YyAvLyAiY29uZmlndXJlKGFwcGxpY2F0aW9uLGFzc2V0LGFjY291bnQpdm9pZCIKPT0KYm56IG1haW5fbDYKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHgzZjZmZTYyZCAvLyAibWludChheGZlcixhY2NvdW50KXZvaWQiCj09CmJueiBtYWluX2w1CmVycgptYWluX2w1Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIG1pbnRjYXN0ZXJfNgppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sNjoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiBjb25maWd1cmVjYXN0ZXJfNQppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sNzoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiB1cGRhdGVyYXRlY2FzdGVyXzQKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDg6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KYm56IG1haW5fbDEwCmVycgptYWluX2wxMDoKdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKPT0KYXNzZXJ0CmludGNfMSAvLyAxCnJldHVybgoKLy8gaXNfcmF0ZV9vcmFjbGUKaXNyYXRlb3JhY2xlXzA6CnByb3RvIDEgMQpmcmFtZV9kaWcgLTEKYnl0ZWNfMCAvLyAicmF0ZV9vcmFjbGUiCmFwcF9nbG9iYWxfZ2V0Cj09CnJldHN1YgoKLy8gdXBkYXRlX3JhdGUKdXBkYXRlcmF0ZV8xOgpwcm90byAxIDAKdHhuIFNlbmRlcgpjYWxsc3ViIGlzcmF0ZW9yYWNsZV8wCi8vIHVuYXV0aG9yaXplZAphc3NlcnQKcHVzaGJ5dGVzIDB4NzI2MTc0NjUgLy8gInJhdGUiCmZyYW1lX2RpZyAtMQphcHBfZ2xvYmFsX3B1dApyZXRzdWIKCi8vIGNvbmZpZ3VyZQpjb25maWd1cmVfMjoKcHJvdG8gMyAwCnR4biBTZW5kZXIKZ2xvYmFsIENyZWF0b3JBZGRyZXNzCj09Ci8vIHVuYXV0aG9yaXplZAphc3NlcnQKcHVzaGJ5dGVzIDB4NzI2NTczNjU3Mjc2NjU1ZjY5NjQgLy8gInJlc2VydmVfaWQiCmZyYW1lX2RpZyAtMwp0eG5hcyBBcHBsaWNhdGlvbnMKYXBwX2dsb2JhbF9wdXQKYnl0ZWNfMSAvLyAiYXNzZXRfaWQiCmZyYW1lX2RpZyAtMgp0eG5hcyBBc3NldHMKYXBwX2dsb2JhbF9wdXQKYnl0ZWNfMCAvLyAicmF0ZV9vcmFjbGUiCmZyYW1lX2RpZyAtMQp0eG5hcyBBY2NvdW50cwphcHBfZ2xvYmFsX3B1dAppdHhuX2JlZ2luCmludGNfMiAvLyBheGZlcgppdHhuX2ZpZWxkIFR5cGVFbnVtCmZyYW1lX2RpZyAtMgp0eG5hcyBBc3NldHMKaXR4bl9maWVsZCBYZmVyQXNzZXQKaW50Y18wIC8vIDAKaXR4bl9maWVsZCBBc3NldEFtb3VudApnbG9iYWwgQ3VycmVudEFwcGxpY2F0aW9uQWRkcmVzcwppdHhuX2ZpZWxkIFNlbmRlcgpnbG9iYWwgQ3VycmVudEFwcGxpY2F0aW9uQWRkcmVzcwppdHhuX2ZpZWxkIFJlY2VpdmVyCml0eG5fc3VibWl0CnJldHN1YgoKLy8gbWludAptaW50XzM6CnByb3RvIDIgMApmcmFtZV9kaWcgLTIKZ3R4bnMgWGZlckFzc2V0CmJ5dGVjXzEgLy8gImFzc2V0X2lkIgphcHBfZ2xvYmFsX2dldAo9PQovLyBhc3NldCBub3Qgc3VwcG9ydGVkCmFzc2VydApyZXRzdWIKCi8vIHVwZGF0ZV9yYXRlX2Nhc3Rlcgp1cGRhdGVyYXRlY2FzdGVyXzQ6CnByb3RvIDAgMAppbnRjXzAgLy8gMAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmJ0b2kKZnJhbWVfYnVyeSAwCmZyYW1lX2RpZyAwCmNhbGxzdWIgdXBkYXRlcmF0ZV8xCnJldHN1YgoKLy8gY29uZmlndXJlX2Nhc3Rlcgpjb25maWd1cmVjYXN0ZXJfNToKcHJvdG8gMCAwCmludGNfMCAvLyAwCmR1cG4gMgp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmludGNfMCAvLyAwCmdldGJ5dGUKZnJhbWVfYnVyeSAwCnR4bmEgQXBwbGljYXRpb25BcmdzIDIKaW50Y18wIC8vIDAKZ2V0Ynl0ZQpmcmFtZV9idXJ5IDEKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwppbnRjXzAgLy8gMApnZXRieXRlCmZyYW1lX2J1cnkgMgpmcmFtZV9kaWcgMApmcmFtZV9kaWcgMQpmcmFtZV9kaWcgMgpjYWxsc3ViIGNvbmZpZ3VyZV8yCnJldHN1YgoKLy8gbWludF9jYXN0ZXIKbWludGNhc3Rlcl82Ogpwcm90byAwIDAKaW50Y18wIC8vIDAKZHVwCnR4bmEgQXBwbGljYXRpb25BcmdzIDEKaW50Y18wIC8vIDAKZ2V0Ynl0ZQpmcmFtZV9idXJ5IDEKdHhuIEdyb3VwSW5kZXgKaW50Y18xIC8vIDEKLQpmcmFtZV9idXJ5IDAKZnJhbWVfZGlnIDAKZ3R4bnMgVHlwZUVudW0KaW50Y18yIC8vIGF4ZmVyCj09CmFzc2VydApmcmFtZV9kaWcgMApmcmFtZV9kaWcgMQpjYWxsc3ViIG1pbnRfMwpyZXRzdWI=",
     "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
   },
   "state": {
     "global": {
-      "num_byte_slices": 0,
-      "num_uints": 0
+      "num_byte_slices": 1,
+      "num_uints": 3
     },
     "local": {
       "num_byte_slices": 0,
@@ -49,7 +59,28 @@ export const APP_SPEC: AppSpec = {
   },
   "schema": {
     "global": {
-      "declared": {},
+      "declared": {
+        "asset_id": {
+          "type": "uint64",
+          "key": "asset_id",
+          "descr": ""
+        },
+        "rate": {
+          "type": "uint64",
+          "key": "rate",
+          "descr": ""
+        },
+        "rate_oracle": {
+          "type": "bytes",
+          "key": "rate_oracle",
+          "descr": ""
+        },
+        "reserve_id": {
+          "type": "uint64",
+          "key": "reserve_id",
+          "descr": ""
+        }
+      },
       "reserved": {}
     },
     "local": {
@@ -61,15 +92,51 @@ export const APP_SPEC: AppSpec = {
     "name": "lora",
     "methods": [
       {
-        "name": "hello",
+        "name": "update_rate",
         "args": [
           {
-            "type": "string",
-            "name": "name"
+            "type": "uint64",
+            "name": "rate"
           }
         ],
         "returns": {
-          "type": "string"
+          "type": "void"
+        }
+      },
+      {
+        "name": "configure",
+        "args": [
+          {
+            "type": "application",
+            "name": "reserve"
+          },
+          {
+            "type": "asset",
+            "name": "asset"
+          },
+          {
+            "type": "account",
+            "name": "rate_oracle"
+          }
+        ],
+        "returns": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "mint",
+        "args": [
+          {
+            "type": "axfer",
+            "name": "asset"
+          },
+          {
+            "type": "account",
+            "name": "to"
+          }
+        ],
+        "returns": {
+          "type": "void"
         }
       }
     ],
@@ -135,13 +202,41 @@ export type Lora = {
    * Maps method signatures / names to their argument and return types.
    */
   methods:
-    & Record<'hello(string)string' | 'hello', {
+    & Record<'update_rate(uint64)void' | 'update_rate', {
       argsObj: {
-        name: string
+        rate: bigint | number
       }
-      argsTuple: [name: string]
-      returns: string
+      argsTuple: [rate: bigint | number]
+      returns: void
     }>
+    & Record<'configure(application,asset,account)void' | 'configure', {
+      argsObj: {
+        reserve: number | bigint
+        asset: number | bigint
+        rate_oracle: string | Uint8Array
+      }
+      argsTuple: [reserve: number | bigint, asset: number | bigint, rate_oracle: string | Uint8Array]
+      returns: void
+    }>
+    & Record<'mint(axfer,account)void' | 'mint', {
+      argsObj: {
+        asset: TransactionToSign | Transaction | Promise<SendTransactionResult>
+        to: string | Uint8Array
+      }
+      argsTuple: [asset: TransactionToSign | Transaction | Promise<SendTransactionResult>, to: string | Uint8Array]
+      returns: void
+    }>
+  /**
+   * Defines the shape of the global and local state of the application.
+   */
+  state: {
+    global: {
+      'asset_id'?: IntegerState
+      'rate'?: IntegerState
+      'rate_oracle'?: BinaryState
+      'reserve_id'?: IntegerState
+    }
+  }
 }
 /**
  * Defines the possible abi call signatures
@@ -214,16 +309,44 @@ export abstract class LoraCallFactory {
   }
 
   /**
-   * Constructs a no op call for the hello(string)string ABI method
+   * Constructs a no op call for the update_rate(uint64)void ABI method
    *
    * @param args Any args for the contract call
    * @param params Any additional parameters for the call
    * @returns A TypedCallParams object for the call
    */
-  static hello(args: MethodArgs<'hello(string)string'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+  static updateRate(args: MethodArgs<'update_rate(uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
     return {
-      method: 'hello(string)string' as const,
-      methodArgs: Array.isArray(args) ? args : [args.name],
+      method: 'update_rate(uint64)void' as const,
+      methodArgs: Array.isArray(args) ? args : [args.rate],
+      ...params,
+    }
+  }
+  /**
+   * Constructs a no op call for the configure(application,asset,account)void ABI method
+   *
+   * @param args Any args for the contract call
+   * @param params Any additional parameters for the call
+   * @returns A TypedCallParams object for the call
+   */
+  static configure(args: MethodArgs<'configure(application,asset,account)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+    return {
+      method: 'configure(application,asset,account)void' as const,
+      methodArgs: Array.isArray(args) ? args : [args.reserve, args.asset, args.rate_oracle],
+      ...params,
+    }
+  }
+  /**
+   * Constructs a no op call for the mint(axfer,account)void ABI method
+   *
+   * @param args Any args for the contract call
+   * @param params Any additional parameters for the call
+   * @returns A TypedCallParams object for the call
+   */
+  static mint(args: MethodArgs<'mint(axfer,account)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+    return {
+      method: 'mint(axfer,account)void' as const,
+      methodArgs: Array.isArray(args) ? args : [args.asset, args.to],
       ...params,
     }
   }
@@ -326,14 +449,101 @@ export class LoraClient {
   }
 
   /**
-   * Calls the hello(string)string ABI method.
+   * Calls the update_rate(uint64)void ABI method.
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The result of the call
    */
-  public hello(args: MethodArgs<'hello(string)string'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
-    return this.call(LoraCallFactory.hello(args, params))
+  public updateRate(args: MethodArgs<'update_rate(uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+    return this.call(LoraCallFactory.updateRate(args, params))
+  }
+
+  /**
+   * Calls the configure(application,asset,account)void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The result of the call
+   */
+  public configure(args: MethodArgs<'configure(application,asset,account)void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+    return this.call(LoraCallFactory.configure(args, params))
+  }
+
+  /**
+   * Calls the mint(axfer,account)void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The result of the call
+   */
+  public mint(args: MethodArgs<'mint(axfer,account)void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+    return this.call(LoraCallFactory.mint(args, params))
+  }
+
+  /**
+   * Extracts a binary state value out of an AppState dictionary
+   *
+   * @param state The state dictionary containing the state value
+   * @param key The key of the state value
+   * @returns A BinaryState instance containing the state value, or undefined if the key was not found
+   */
+  private static getBinaryState(state: AppState, key: string): BinaryState | undefined {
+    const value = state[key]
+    if (!value) return undefined
+    if (!('valueRaw' in value))
+      throw new Error(`Failed to parse state value for ${key}; received an int when expected a byte array`)
+    return {
+      asString(): string {
+        return value.value
+      },
+      asByteArray(): Uint8Array {
+        return value.valueRaw
+      }
+    }
+  }
+
+  /**
+   * Extracts a integer state value out of an AppState dictionary
+   *
+   * @param state The state dictionary containing the state value
+   * @param key The key of the state value
+   * @returns An IntegerState instance containing the state value, or undefined if the key was not found
+   */
+  private static getIntegerState(state: AppState, key: string): IntegerState | undefined {
+    const value = state[key]
+    if (!value) return undefined
+    if ('valueRaw' in value)
+      throw new Error(`Failed to parse state value for ${key}; received a byte array when expected a number`)
+    return {
+      asBigInt() {
+        return typeof value.value === 'bigint' ? value.value : BigInt(value.value)
+      },
+      asNumber(): number {
+        return typeof value.value === 'bigint' ? Number(value.value) : value.value
+      },
+    }
+  }
+
+  /**
+   * Returns the smart contract's global state wrapped in a strongly typed accessor with options to format the stored value
+   */
+  public async getGlobalState(): Promise<Lora['state']['global']> {
+    const state = await this.appClient.getGlobalState()
+    return {
+      get asset_id() {
+        return LoraClient.getIntegerState(state, 'asset_id')
+      },
+      get rate() {
+        return LoraClient.getIntegerState(state, 'rate')
+      },
+      get rate_oracle() {
+        return LoraClient.getBinaryState(state, 'rate_oracle')
+      },
+      get reserve_id() {
+        return LoraClient.getIntegerState(state, 'reserve_id')
+      },
+    }
   }
 
   public compose(): LoraComposer {
@@ -342,8 +552,18 @@ export class LoraClient {
     let promiseChain:Promise<unknown> = Promise.resolve()
     const resultMappers: Array<undefined | ((x: any) => any)> = []
     return {
-      hello(args: MethodArgs<'hello(string)string'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
-        promiseChain = promiseChain.then(() => client.hello(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
+      updateRate(args: MethodArgs<'update_rate(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+        promiseChain = promiseChain.then(() => client.updateRate(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
+        resultMappers.push(undefined)
+        return this
+      },
+      configure(args: MethodArgs<'configure(application,asset,account)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+        promiseChain = promiseChain.then(() => client.configure(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
+        resultMappers.push(undefined)
+        return this
+      },
+      mint(args: MethodArgs<'mint(axfer,account)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+        promiseChain = promiseChain.then(() => client.mint(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
@@ -373,13 +593,31 @@ export class LoraClient {
 }
 export type LoraComposer<TReturns extends [...any[]] = []> = {
   /**
-   * Calls the hello(string)string ABI method.
+   * Calls the update_rate(uint64)void ABI method.
    *
    * @param args The arguments for the contract call
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  hello(args: MethodArgs<'hello(string)string'>, params?: AppClientCallCoreParams & CoreAppCallArgs): LoraComposer<[...TReturns, MethodReturn<'hello(string)string'>]>
+  updateRate(args: MethodArgs<'update_rate(uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): LoraComposer<[...TReturns, MethodReturn<'update_rate(uint64)void'>]>
+
+  /**
+   * Calls the configure(application,asset,account)void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+   */
+  configure(args: MethodArgs<'configure(application,asset,account)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): LoraComposer<[...TReturns, MethodReturn<'configure(application,asset,account)void'>]>
+
+  /**
+   * Calls the mint(axfer,account)void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+   */
+  mint(args: MethodArgs<'mint(axfer,account)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): LoraComposer<[...TReturns, MethodReturn<'mint(axfer,account)void'>]>
 
   /**
    * Makes a clear_state call to an existing instance of the lora smart contract.
