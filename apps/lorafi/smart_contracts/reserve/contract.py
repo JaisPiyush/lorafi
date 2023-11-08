@@ -56,30 +56,6 @@ def set_usdt_token(asset: abi.Asset, commander: abi.Account) -> Expr:
     )
 
 
-# @pt.Subroutine(pt.TealType.none)
-# def create_asa_inner_tx(
-#     name: abi.String, unit_name: abi.String, url: abi.String, output: abi.Uint64
-# ) -> Expr:
-#     return pt.Seq(
-#         pt.InnerTxnBuilder.Execute(
-#             {
-#                 TxnField.type_enum: TxnType.AssetConfig,
-#                 TxnField.config_asset_total: UNDERLYING_ASA_TOTAL,
-#                 TxnField.config_asset_decimals: UNDERLYING_ASA_DECIMALS,
-#                 TxnField.config_asset_default_frozen: UNDERLYING_ASA_DEFAULT_FROZEN,
-#                 TxnField.config_asset_unit_name: unit_name.get(),
-#                 TxnField.config_asset_name: name.get(),
-#                 TxnField.config_asset_url: url.get(),
-#                 TxnField.config_asset_manager: UNDERLYING_ASA_MANAGER_ADDR,
-#                 TxnField.config_asset_reserve: UNDERLYING_ASA_RESERVE_ADDR,
-#                 TxnField.config_asset_freeze: UNDERLYING_ASA_FREEZE_ADDR,
-#                 TxnField.config_asset_clawback: UNDERLYING_ASA_CLAWBACK_ADDR,
-#             }
-#         ),
-#         output.set(pt.InnerTxn.created_asset_id()),
-#     )
-
-
 ## Fix return value is zero
 @app.external(authorize=beaker.Authorize.only_creator())
 def create_asa(
@@ -118,30 +94,6 @@ def asa_mint_inner_txn(
             TxnField.asset_receiver: receiver.address(),
         }
     )
-
-
-# @pt.Subroutine(pt.TealType.none)
-# def pre_condition_checks(asset: abi.Asset) -> Expr:
-#     sender = pt.Txn.sender()
-#     asset_id = asset.asset_id()
-#     return pt.Seq(
-#         pt.Assert(
-#             pt.Or(
-#                 app.state.principal_token_id.get() == asset_id,
-#                 app.state.principal_token_id.get() == asset_id,
-#                 app.state.yield_token_id.get() == asset_id,
-#                 app.state.usdt_token_id.get() == asset_id,
-#             ),
-#             comment="asset is not controlled by the reserve",
-#         ),
-#         pt.Assert(
-#             pt.Or(
-#                 app.state.portal_asset_commander.get() == sender,
-#                 app.state.market_token_commander.get() == sender,
-#                 app.state.usdt_token_commander.get() == sender,
-#             )
-#         ),
-#     )
 
 
 @app.external
