@@ -1,35 +1,27 @@
 #pragma version 8
-intcblock 0 1 4
-bytecblock 0x726174655f6f7261636c65 0x61737365745f6964
+intcblock 0 1 100000 4
+bytecblock 0x72617465 0x726174655f6f7261636c65 0x726573657276655f6964 0x61737365745f6964
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l8
+bnz main_l10
 txna ApplicationArgs 0
 pushbytes 0x02659f48 // "update_rate(uint64)void"
 ==
-bnz main_l7
+bnz main_l9
 txna ApplicationArgs 0
 pushbytes 0xf818637c // "configure(application,asset,account)void"
 ==
-bnz main_l6
+bnz main_l8
 txna ApplicationArgs 0
 pushbytes 0x3f6fe62d // "mint(axfer,account)void"
 ==
-bnz main_l5
-err
-main_l5:
-txn OnCompletion
-intc_0 // NoOp
+bnz main_l7
+txna ApplicationArgs 0
+pushbytes 0x0e5983dd // "mint_on_command(uint64,uint64,account)void"
 ==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub mintcaster_6
-intc_1 // 1
-return
+bnz main_l6
+err
 main_l6:
 txn OnCompletion
 intc_0 // NoOp
@@ -39,7 +31,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub configurecaster_5
+callsub mintoncommandcaster_9
 intc_1 // 1
 return
 main_l7:
@@ -51,16 +43,40 @@ intc_0 // 0
 !=
 &&
 assert
-callsub updateratecaster_4
+callsub mintcaster_8
 intc_1 // 1
 return
 main_l8:
 txn OnCompletion
 intc_0 // NoOp
 ==
-bnz main_l10
-err
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub configurecaster_7
+intc_1 // 1
+return
+main_l9:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub updateratecaster_6
+intc_1 // 1
+return
 main_l10:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l12
+err
+main_l12:
 txn ApplicationID
 intc_0 // 0
 ==
@@ -72,7 +88,7 @@ return
 israteoracle_0:
 proto 1 1
 frame_dig -1
-bytec_0 // "rate_oracle"
+bytec_1 // "rate_oracle"
 app_global_get
 ==
 retsub
@@ -84,7 +100,7 @@ txn Sender
 callsub israteoracle_0
 // unauthorized
 assert
-pushbytes 0x72617465 // "rate"
+bytec_0 // "rate"
 frame_dig -1
 app_global_put
 retsub
@@ -97,20 +113,20 @@ global CreatorAddress
 ==
 // unauthorized
 assert
-pushbytes 0x726573657276655f6964 // "reserve_id"
+bytec_2 // "reserve_id"
 frame_dig -3
 txnas Applications
 app_global_put
-bytec_1 // "asset_id"
+bytec_3 // "asset_id"
 frame_dig -2
 txnas Assets
 app_global_put
-bytec_0 // "rate_oracle"
+bytec_1 // "rate_oracle"
 frame_dig -1
 txnas Accounts
 app_global_put
 itxn_begin
-intc_2 // axfer
+intc_3 // axfer
 itxn_field TypeEnum
 frame_dig -2
 txnas Assets
@@ -124,20 +140,73 @@ itxn_field Receiver
 itxn_submit
 retsub
 
-// mint
+// _mint
 mint_3:
+proto 3 0
+itxn_begin
+pushint 6 // appl
+itxn_field TypeEnum
+bytec_2 // "reserve_id"
+app_global_get
+itxn_field ApplicationID
+pushbytes 0x6d696e745f7969656c645f746f6b656e5f70616972 // "mint_yield_token_pair"
+itxn_field ApplicationArgs
+frame_dig -3
+itxn_field ApplicationArgs
+frame_dig -2
+itxn_field ApplicationArgs
+frame_dig -1
+txnas Accounts
+itxn_field ApplicationArgs
+itxn_submit
+retsub
+
+// mint
+mint_4:
 proto 2 0
 frame_dig -2
 gtxns XferAsset
-bytec_1 // "asset_id"
+bytec_3 // "asset_id"
 app_global_get
 ==
 // asset not supported
 assert
+frame_dig -2
+gtxns AssetAmount
+intc_2 // 100000
+bytec_0 // "rate"
+app_global_get
+-
+intc_2 // 100000
+/
+*
+frame_dig -2
+gtxns AssetAmount
+bytec_0 // "rate"
+app_global_get
+intc_2 // 100000
+/
+*
+frame_dig -1
+callsub mint_3
+retsub
+
+// mint_on_command
+mintoncommand_5:
+proto 3 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+frame_dig -3
+frame_dig -2
+frame_dig -1
+callsub mint_3
 retsub
 
 // update_rate_caster
-updateratecaster_4:
+updateratecaster_6:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
@@ -148,7 +217,7 @@ callsub updaterate_1
 retsub
 
 // configure_caster
-configurecaster_5:
+configurecaster_7:
 proto 0 0
 intc_0 // 0
 dupn 2
@@ -171,7 +240,7 @@ callsub configure_2
 retsub
 
 // mint_caster
-mintcaster_6:
+mintcaster_8:
 proto 0 0
 intc_0 // 0
 dup
@@ -185,10 +254,31 @@ intc_1 // 1
 frame_bury 0
 frame_dig 0
 gtxns TypeEnum
-intc_2 // axfer
+intc_3 // axfer
 ==
 assert
 frame_dig 0
 frame_dig 1
-callsub mint_3
+callsub mint_4
+retsub
+
+// mint_on_command_caster
+mintoncommandcaster_9:
+proto 0 0
+intc_0 // 0
+dupn 2
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+txna ApplicationArgs 2
+btoi
+frame_bury 1
+txna ApplicationArgs 3
+intc_0 // 0
+getbyte
+frame_bury 2
+frame_dig 0
+frame_dig 1
+frame_dig 2
+callsub mintoncommand_5
 retsub

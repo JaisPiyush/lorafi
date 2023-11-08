@@ -45,10 +45,20 @@ def configure(reserve: abi.Application, asset: abi.Asset, rate_oracle: abi.Accou
 
 
 @pt.Subroutine(TealType.none)
-def _mint(asset_id: Expr, amount: Expr, to: Expr):
+def _mint(principal: Expr, yield_amount: Expr, to: abi.Account):
     return Seq(
-        pt.InnerTxnBuilder.MethodCall(
-            app.state.reserve_id.get(), "mint", [asset_id, amount, to]
+        pt.InnerTxnBuilder.Execute(
+            {
+                TxnField.type_enum: TxnType.ApplicationCall,
+                TxnField.application_id: app.state.reserve_id.get(),
+                TxnField.on_completion: pt.OnComplete.NoOp,
+                TxnField.application_args: [
+                    pt.Bytes("mint_yield_token_pair"),
+                    principal,
+                    yield_amount,
+                    to.address(),
+                ],
+            }
         )
     )
 
@@ -60,4 +70,24 @@ def mint(asset: abi.AssetTransferTransaction, to: abi.Account):
             asset.get().xfer_asset() == app.state.asset_id.get(),
             comment="asset not supported",
         ),
+        _mint(
+            pt.Mul(
+                asset.get().asset_amount(),
+                pt.Div(
+                    pt.Minus(pt.Int(100_000), app.state.rate.get()), pt.Int(100_000)
+                ),
+            ),
+            pt.Mul(
+                asset.get().asset_amount(),
+                pt.Div(app.state.rate.get(), pt.Int(100_000)),
+            ),
+            to,
+        ),
     )
+
+
+@app.external(authorize=beaker.Authorize.only_creator())
+def mint_on_command(
+    principal_amount: abi.Uint64, yield_amount: abi.Uint64, to: abi.Account
+):
+    return Seq(_mint(principal_amount.get(), yield_amount.get(), to))

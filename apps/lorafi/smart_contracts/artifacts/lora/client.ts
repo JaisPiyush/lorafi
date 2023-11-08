@@ -41,10 +41,15 @@ export const APP_SPEC: AppSpec = {
       "call_config": {
         "no_op": "CALL"
       }
+    },
+    "mint_on_command(uint64,uint64,account)void": {
+      "call_config": {
+        "no_op": "CALL"
+      }
     }
   },
   "source": {
-    "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMSA0CmJ5dGVjYmxvY2sgMHg3MjYxNzQ2NTVmNmY3MjYxNjM2YzY1IDB4NjE3MzczNjU3NDVmNjk2NAp0eG4gTnVtQXBwQXJncwppbnRjXzAgLy8gMAo9PQpibnogbWFpbl9sOAp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDAyNjU5ZjQ4IC8vICJ1cGRhdGVfcmF0ZSh1aW50NjQpdm9pZCIKPT0KYm56IG1haW5fbDcKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHhmODE4NjM3YyAvLyAiY29uZmlndXJlKGFwcGxpY2F0aW9uLGFzc2V0LGFjY291bnQpdm9pZCIKPT0KYm56IG1haW5fbDYKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHgzZjZmZTYyZCAvLyAibWludChheGZlcixhY2NvdW50KXZvaWQiCj09CmJueiBtYWluX2w1CmVycgptYWluX2w1Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIG1pbnRjYXN0ZXJfNgppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sNjoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiBjb25maWd1cmVjYXN0ZXJfNQppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sNzoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiB1cGRhdGVyYXRlY2FzdGVyXzQKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDg6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KYm56IG1haW5fbDEwCmVycgptYWluX2wxMDoKdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKPT0KYXNzZXJ0CmludGNfMSAvLyAxCnJldHVybgoKLy8gaXNfcmF0ZV9vcmFjbGUKaXNyYXRlb3JhY2xlXzA6CnByb3RvIDEgMQpmcmFtZV9kaWcgLTEKYnl0ZWNfMCAvLyAicmF0ZV9vcmFjbGUiCmFwcF9nbG9iYWxfZ2V0Cj09CnJldHN1YgoKLy8gdXBkYXRlX3JhdGUKdXBkYXRlcmF0ZV8xOgpwcm90byAxIDAKdHhuIFNlbmRlcgpjYWxsc3ViIGlzcmF0ZW9yYWNsZV8wCi8vIHVuYXV0aG9yaXplZAphc3NlcnQKcHVzaGJ5dGVzIDB4NzI2MTc0NjUgLy8gInJhdGUiCmZyYW1lX2RpZyAtMQphcHBfZ2xvYmFsX3B1dApyZXRzdWIKCi8vIGNvbmZpZ3VyZQpjb25maWd1cmVfMjoKcHJvdG8gMyAwCnR4biBTZW5kZXIKZ2xvYmFsIENyZWF0b3JBZGRyZXNzCj09Ci8vIHVuYXV0aG9yaXplZAphc3NlcnQKcHVzaGJ5dGVzIDB4NzI2NTczNjU3Mjc2NjU1ZjY5NjQgLy8gInJlc2VydmVfaWQiCmZyYW1lX2RpZyAtMwp0eG5hcyBBcHBsaWNhdGlvbnMKYXBwX2dsb2JhbF9wdXQKYnl0ZWNfMSAvLyAiYXNzZXRfaWQiCmZyYW1lX2RpZyAtMgp0eG5hcyBBc3NldHMKYXBwX2dsb2JhbF9wdXQKYnl0ZWNfMCAvLyAicmF0ZV9vcmFjbGUiCmZyYW1lX2RpZyAtMQp0eG5hcyBBY2NvdW50cwphcHBfZ2xvYmFsX3B1dAppdHhuX2JlZ2luCmludGNfMiAvLyBheGZlcgppdHhuX2ZpZWxkIFR5cGVFbnVtCmZyYW1lX2RpZyAtMgp0eG5hcyBBc3NldHMKaXR4bl9maWVsZCBYZmVyQXNzZXQKaW50Y18wIC8vIDAKaXR4bl9maWVsZCBBc3NldEFtb3VudApnbG9iYWwgQ3VycmVudEFwcGxpY2F0aW9uQWRkcmVzcwppdHhuX2ZpZWxkIFNlbmRlcgpnbG9iYWwgQ3VycmVudEFwcGxpY2F0aW9uQWRkcmVzcwppdHhuX2ZpZWxkIFJlY2VpdmVyCml0eG5fc3VibWl0CnJldHN1YgoKLy8gbWludAptaW50XzM6CnByb3RvIDIgMApmcmFtZV9kaWcgLTIKZ3R4bnMgWGZlckFzc2V0CmJ5dGVjXzEgLy8gImFzc2V0X2lkIgphcHBfZ2xvYmFsX2dldAo9PQovLyBhc3NldCBub3Qgc3VwcG9ydGVkCmFzc2VydApyZXRzdWIKCi8vIHVwZGF0ZV9yYXRlX2Nhc3Rlcgp1cGRhdGVyYXRlY2FzdGVyXzQ6CnByb3RvIDAgMAppbnRjXzAgLy8gMAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmJ0b2kKZnJhbWVfYnVyeSAwCmZyYW1lX2RpZyAwCmNhbGxzdWIgdXBkYXRlcmF0ZV8xCnJldHN1YgoKLy8gY29uZmlndXJlX2Nhc3Rlcgpjb25maWd1cmVjYXN0ZXJfNToKcHJvdG8gMCAwCmludGNfMCAvLyAwCmR1cG4gMgp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmludGNfMCAvLyAwCmdldGJ5dGUKZnJhbWVfYnVyeSAwCnR4bmEgQXBwbGljYXRpb25BcmdzIDIKaW50Y18wIC8vIDAKZ2V0Ynl0ZQpmcmFtZV9idXJ5IDEKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwppbnRjXzAgLy8gMApnZXRieXRlCmZyYW1lX2J1cnkgMgpmcmFtZV9kaWcgMApmcmFtZV9kaWcgMQpmcmFtZV9kaWcgMgpjYWxsc3ViIGNvbmZpZ3VyZV8yCnJldHN1YgoKLy8gbWludF9jYXN0ZXIKbWludGNhc3Rlcl82Ogpwcm90byAwIDAKaW50Y18wIC8vIDAKZHVwCnR4bmEgQXBwbGljYXRpb25BcmdzIDEKaW50Y18wIC8vIDAKZ2V0Ynl0ZQpmcmFtZV9idXJ5IDEKdHhuIEdyb3VwSW5kZXgKaW50Y18xIC8vIDEKLQpmcmFtZV9idXJ5IDAKZnJhbWVfZGlnIDAKZ3R4bnMgVHlwZUVudW0KaW50Y18yIC8vIGF4ZmVyCj09CmFzc2VydApmcmFtZV9kaWcgMApmcmFtZV9kaWcgMQpjYWxsc3ViIG1pbnRfMwpyZXRzdWI=",
+    "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMSAxMDAwMDAgNApieXRlY2Jsb2NrIDB4NzI2MTc0NjUgMHg3MjYxNzQ2NTVmNmY3MjYxNjM2YzY1IDB4NzI2NTczNjU3Mjc2NjU1ZjY5NjQgMHg2MTczNzM2NTc0NWY2OTY0CnR4biBOdW1BcHBBcmdzCmludGNfMCAvLyAwCj09CmJueiBtYWluX2wxMAp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDAyNjU5ZjQ4IC8vICJ1cGRhdGVfcmF0ZSh1aW50NjQpdm9pZCIKPT0KYm56IG1haW5fbDkKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHhmODE4NjM3YyAvLyAiY29uZmlndXJlKGFwcGxpY2F0aW9uLGFzc2V0LGFjY291bnQpdm9pZCIKPT0KYm56IG1haW5fbDgKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHgzZjZmZTYyZCAvLyAibWludChheGZlcixhY2NvdW50KXZvaWQiCj09CmJueiBtYWluX2w3CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4MGU1OTgzZGQgLy8gIm1pbnRfb25fY29tbWFuZCh1aW50NjQsdWludDY0LGFjY291bnQpdm9pZCIKPT0KYm56IG1haW5fbDYKZXJyCm1haW5fbDY6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKIT0KJiYKYXNzZXJ0CmNhbGxzdWIgbWludG9uY29tbWFuZGNhc3Rlcl85CmludGNfMSAvLyAxCnJldHVybgptYWluX2w3Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIG1pbnRjYXN0ZXJfOAppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sODoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiBjb25maWd1cmVjYXN0ZXJfNwppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sOToKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiB1cGRhdGVyYXRlY2FzdGVyXzYKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDEwOgp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CmJueiBtYWluX2wxMgplcnIKbWFpbl9sMTI6CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCj09CmFzc2VydAppbnRjXzEgLy8gMQpyZXR1cm4KCi8vIGlzX3JhdGVfb3JhY2xlCmlzcmF0ZW9yYWNsZV8wOgpwcm90byAxIDEKZnJhbWVfZGlnIC0xCmJ5dGVjXzEgLy8gInJhdGVfb3JhY2xlIgphcHBfZ2xvYmFsX2dldAo9PQpyZXRzdWIKCi8vIHVwZGF0ZV9yYXRlCnVwZGF0ZXJhdGVfMToKcHJvdG8gMSAwCnR4biBTZW5kZXIKY2FsbHN1YiBpc3JhdGVvcmFjbGVfMAovLyB1bmF1dGhvcml6ZWQKYXNzZXJ0CmJ5dGVjXzAgLy8gInJhdGUiCmZyYW1lX2RpZyAtMQphcHBfZ2xvYmFsX3B1dApyZXRzdWIKCi8vIGNvbmZpZ3VyZQpjb25maWd1cmVfMjoKcHJvdG8gMyAwCnR4biBTZW5kZXIKZ2xvYmFsIENyZWF0b3JBZGRyZXNzCj09Ci8vIHVuYXV0aG9yaXplZAphc3NlcnQKYnl0ZWNfMiAvLyAicmVzZXJ2ZV9pZCIKZnJhbWVfZGlnIC0zCnR4bmFzIEFwcGxpY2F0aW9ucwphcHBfZ2xvYmFsX3B1dApieXRlY18zIC8vICJhc3NldF9pZCIKZnJhbWVfZGlnIC0yCnR4bmFzIEFzc2V0cwphcHBfZ2xvYmFsX3B1dApieXRlY18xIC8vICJyYXRlX29yYWNsZSIKZnJhbWVfZGlnIC0xCnR4bmFzIEFjY291bnRzCmFwcF9nbG9iYWxfcHV0Cml0eG5fYmVnaW4KaW50Y18zIC8vIGF4ZmVyCml0eG5fZmllbGQgVHlwZUVudW0KZnJhbWVfZGlnIC0yCnR4bmFzIEFzc2V0cwppdHhuX2ZpZWxkIFhmZXJBc3NldAppbnRjXzAgLy8gMAppdHhuX2ZpZWxkIEFzc2V0QW1vdW50Cmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCml0eG5fZmllbGQgU2VuZGVyCmdsb2JhbCBDdXJyZW50QXBwbGljYXRpb25BZGRyZXNzCml0eG5fZmllbGQgUmVjZWl2ZXIKaXR4bl9zdWJtaXQKcmV0c3ViCgovLyBfbWludAptaW50XzM6CnByb3RvIDMgMAppdHhuX2JlZ2luCnB1c2hpbnQgNiAvLyBhcHBsCml0eG5fZmllbGQgVHlwZUVudW0KYnl0ZWNfMiAvLyAicmVzZXJ2ZV9pZCIKYXBwX2dsb2JhbF9nZXQKaXR4bl9maWVsZCBBcHBsaWNhdGlvbklECnB1c2hieXRlcyAweDZkNjk2ZTc0NWY3OTY5NjU2YzY0NWY3NDZmNmI2NTZlNWY3MDYxNjk3MiAvLyAibWludF95aWVsZF90b2tlbl9wYWlyIgppdHhuX2ZpZWxkIEFwcGxpY2F0aW9uQXJncwpmcmFtZV9kaWcgLTMKaXR4bl9maWVsZCBBcHBsaWNhdGlvbkFyZ3MKZnJhbWVfZGlnIC0yCml0eG5fZmllbGQgQXBwbGljYXRpb25BcmdzCmZyYW1lX2RpZyAtMQp0eG5hcyBBY2NvdW50cwppdHhuX2ZpZWxkIEFwcGxpY2F0aW9uQXJncwppdHhuX3N1Ym1pdApyZXRzdWIKCi8vIG1pbnQKbWludF80Ogpwcm90byAyIDAKZnJhbWVfZGlnIC0yCmd0eG5zIFhmZXJBc3NldApieXRlY18zIC8vICJhc3NldF9pZCIKYXBwX2dsb2JhbF9nZXQKPT0KLy8gYXNzZXQgbm90IHN1cHBvcnRlZAphc3NlcnQKZnJhbWVfZGlnIC0yCmd0eG5zIEFzc2V0QW1vdW50CmludGNfMiAvLyAxMDAwMDAKYnl0ZWNfMCAvLyAicmF0ZSIKYXBwX2dsb2JhbF9nZXQKLQppbnRjXzIgLy8gMTAwMDAwCi8KKgpmcmFtZV9kaWcgLTIKZ3R4bnMgQXNzZXRBbW91bnQKYnl0ZWNfMCAvLyAicmF0ZSIKYXBwX2dsb2JhbF9nZXQKaW50Y18yIC8vIDEwMDAwMAovCioKZnJhbWVfZGlnIC0xCmNhbGxzdWIgbWludF8zCnJldHN1YgoKLy8gbWludF9vbl9jb21tYW5kCm1pbnRvbmNvbW1hbmRfNToKcHJvdG8gMyAwCnR4biBTZW5kZXIKZ2xvYmFsIENyZWF0b3JBZGRyZXNzCj09Ci8vIHVuYXV0aG9yaXplZAphc3NlcnQKZnJhbWVfZGlnIC0zCmZyYW1lX2RpZyAtMgpmcmFtZV9kaWcgLTEKY2FsbHN1YiBtaW50XzMKcmV0c3ViCgovLyB1cGRhdGVfcmF0ZV9jYXN0ZXIKdXBkYXRlcmF0ZWNhc3Rlcl82Ogpwcm90byAwIDAKaW50Y18wIC8vIDAKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQpidG9pCmZyYW1lX2J1cnkgMApmcmFtZV9kaWcgMApjYWxsc3ViIHVwZGF0ZXJhdGVfMQpyZXRzdWIKCi8vIGNvbmZpZ3VyZV9jYXN0ZXIKY29uZmlndXJlY2FzdGVyXzc6CnByb3RvIDAgMAppbnRjXzAgLy8gMApkdXBuIDIKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQppbnRjXzAgLy8gMApnZXRieXRlCmZyYW1lX2J1cnkgMAp0eG5hIEFwcGxpY2F0aW9uQXJncyAyCmludGNfMCAvLyAwCmdldGJ5dGUKZnJhbWVfYnVyeSAxCnR4bmEgQXBwbGljYXRpb25BcmdzIDMKaW50Y18wIC8vIDAKZ2V0Ynl0ZQpmcmFtZV9idXJ5IDIKZnJhbWVfZGlnIDAKZnJhbWVfZGlnIDEKZnJhbWVfZGlnIDIKY2FsbHN1YiBjb25maWd1cmVfMgpyZXRzdWIKCi8vIG1pbnRfY2FzdGVyCm1pbnRjYXN0ZXJfODoKcHJvdG8gMCAwCmludGNfMCAvLyAwCmR1cAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmludGNfMCAvLyAwCmdldGJ5dGUKZnJhbWVfYnVyeSAxCnR4biBHcm91cEluZGV4CmludGNfMSAvLyAxCi0KZnJhbWVfYnVyeSAwCmZyYW1lX2RpZyAwCmd0eG5zIFR5cGVFbnVtCmludGNfMyAvLyBheGZlcgo9PQphc3NlcnQKZnJhbWVfZGlnIDAKZnJhbWVfZGlnIDEKY2FsbHN1YiBtaW50XzQKcmV0c3ViCgovLyBtaW50X29uX2NvbW1hbmRfY2FzdGVyCm1pbnRvbmNvbW1hbmRjYXN0ZXJfOToKcHJvdG8gMCAwCmludGNfMCAvLyAwCmR1cG4gMgp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmJ0b2kKZnJhbWVfYnVyeSAwCnR4bmEgQXBwbGljYXRpb25BcmdzIDIKYnRvaQpmcmFtZV9idXJ5IDEKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMwppbnRjXzAgLy8gMApnZXRieXRlCmZyYW1lX2J1cnkgMgpmcmFtZV9kaWcgMApmcmFtZV9kaWcgMQpmcmFtZV9kaWcgMgpjYWxsc3ViIG1pbnRvbmNvbW1hbmRfNQpyZXRzdWI=",
     "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
   },
   "state": {
@@ -129,6 +134,26 @@ export const APP_SPEC: AppSpec = {
           {
             "type": "axfer",
             "name": "asset"
+          },
+          {
+            "type": "account",
+            "name": "to"
+          }
+        ],
+        "returns": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "mint_on_command",
+        "args": [
+          {
+            "type": "uint64",
+            "name": "principal_amount"
+          },
+          {
+            "type": "uint64",
+            "name": "yield_amount"
           },
           {
             "type": "account",
@@ -224,6 +249,15 @@ export type Lora = {
         to: string | Uint8Array
       }
       argsTuple: [asset: TransactionToSign | Transaction | Promise<SendTransactionResult>, to: string | Uint8Array]
+      returns: void
+    }>
+    & Record<'mint_on_command(uint64,uint64,account)void' | 'mint_on_command', {
+      argsObj: {
+        principal_amount: bigint | number
+        yield_amount: bigint | number
+        to: string | Uint8Array
+      }
+      argsTuple: [principal_amount: bigint | number, yield_amount: bigint | number, to: string | Uint8Array]
       returns: void
     }>
   /**
@@ -347,6 +381,20 @@ export abstract class LoraCallFactory {
     return {
       method: 'mint(axfer,account)void' as const,
       methodArgs: Array.isArray(args) ? args : [args.asset, args.to],
+      ...params,
+    }
+  }
+  /**
+   * Constructs a no op call for the mint_on_command(uint64,uint64,account)void ABI method
+   *
+   * @param args Any args for the contract call
+   * @param params Any additional parameters for the call
+   * @returns A TypedCallParams object for the call
+   */
+  static mintOnCommand(args: MethodArgs<'mint_on_command(uint64,uint64,account)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+    return {
+      method: 'mint_on_command(uint64,uint64,account)void' as const,
+      methodArgs: Array.isArray(args) ? args : [args.principal_amount, args.yield_amount, args.to],
       ...params,
     }
   }
@@ -482,6 +530,17 @@ export class LoraClient {
   }
 
   /**
+   * Calls the mint_on_command(uint64,uint64,account)void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The result of the call
+   */
+  public mintOnCommand(args: MethodArgs<'mint_on_command(uint64,uint64,account)void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+    return this.call(LoraCallFactory.mintOnCommand(args, params))
+  }
+
+  /**
    * Extracts a binary state value out of an AppState dictionary
    *
    * @param state The state dictionary containing the state value
@@ -567,6 +626,11 @@ export class LoraClient {
         resultMappers.push(undefined)
         return this
       },
+      mintOnCommand(args: MethodArgs<'mint_on_command(uint64,uint64,account)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+        promiseChain = promiseChain.then(() => client.mintOnCommand(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
+        resultMappers.push(undefined)
+        return this
+      },
       clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.clearState({...args, sendParams: {...args?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
@@ -618,6 +682,15 @@ export type LoraComposer<TReturns extends [...any[]] = []> = {
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
   mint(args: MethodArgs<'mint(axfer,account)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): LoraComposer<[...TReturns, MethodReturn<'mint(axfer,account)void'>]>
+
+  /**
+   * Calls the mint_on_command(uint64,uint64,account)void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+   */
+  mintOnCommand(args: MethodArgs<'mint_on_command(uint64,uint64,account)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): LoraComposer<[...TReturns, MethodReturn<'mint_on_command(uint64,uint64,account)void'>]>
 
   /**
    * Makes a clear_state call to an existing instance of the lora smart contract.
