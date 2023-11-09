@@ -27,6 +27,14 @@
                 {
                     "type": "account",
                     "name": "rate_oracle"
+                },
+                {
+                    "type": "asset",
+                    "name": "_pt"
+                },
+                {
+                    "type": "asset",
+                    "name": "_yt"
                 }
             ],
             "returns": {
@@ -59,6 +67,26 @@
                 {
                     "type": "uint64",
                     "name": "yield_amount"
+                },
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "burn",
+            "args": [
+                {
+                    "type": "axfer",
+                    "name": "_pt"
+                },
+                {
+                    "type": "axfer",
+                    "name": "_yt"
                 },
                 {
                     "type": "account",
