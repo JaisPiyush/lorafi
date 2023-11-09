@@ -130,3 +130,14 @@ def mint_usdt_token(amount: abi.Uint64, to: abi.Account):
         ),
         asa_mint_inner_txn(app.state.usdt_token_id.get(), to, amount),
     )
+
+
+@app.external(authorize=beaker.Authorize.only_creator())
+def mint_usdt_on_command(amount: abi.Uint64, to: abi.Account):
+    return pt.Seq(
+        pt.Assert(
+            pt.Txn.sender() == app.state.usdt_token_commander.get(),
+            comment="cannot mint token",
+        ),
+        asa_mint_inner_txn(app.state.usdt_token_id.get(), to, amount),
+    )
