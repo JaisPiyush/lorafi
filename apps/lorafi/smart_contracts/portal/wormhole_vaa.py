@@ -6,12 +6,13 @@ import beaker
 from pyteal import *
 
 
-
 def read_next(vaa: Expr, offset: int, t: abi.BaseType) -> tuple[int, Expr]:
     size = t.type_spec().byte_length_static()
     return offset + size, t.decode(vaa, start_index=Int(offset), length=Int(size))
 
+
 Bytes32 = abi.StaticBytes[Literal[32]]
+
 
 class ContractTransferVAA:
     def __init__(self):
@@ -52,7 +53,7 @@ class ContractTransferVAA:
         # self.from_address = abi.Address()
 
         #: Arbitrary byte payload
-        self.payload = abi.DynamicBytes()
+        # self.payload = abi.DynamicBytes()
 
     def decode(self, vaa: Expr) -> Expr:
         offset = 0
@@ -104,8 +105,6 @@ class ContractTransferVAA:
         offset, e = read_next(digest_vaa.load(), offset, self.fee)
         ops.append(e)
         # Rest is payload
-        ops.append(self.payload.set(Suffix(digest_vaa.load(), Int(offset))))
+        # ops.append(self.payload.set(Suffix(digest_vaa.load(), Int(offset))))
 
         return Seq(*ops)
-
-

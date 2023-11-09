@@ -26,15 +26,26 @@ import type { SendTransactionResult, TransactionToSign, SendTransactionFrom } fr
 import type { TransactionWithSigner } from 'algosdk'
 import { Algodv2, OnApplicationComplete, Transaction, AtomicTransactionComposer } from 'algosdk'
 export const APP_SPEC: AppSpec = {
-  "hints": {},
+  "hints": {
+    "configure(uint64,address,uint64,uint64)void": {
+      "call_config": {
+        "no_op": "CALL"
+      }
+    },
+    "portal_transfer(byte[])byte[]": {
+      "call_config": {
+        "no_op": "CALL"
+      }
+    }
+  },
   "source": {
-    "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAKdHhuIE51bUFwcEFyZ3MKaW50Y18wIC8vIDAKPT0KYm56IG1haW5fbDIKZXJyCm1haW5fbDI6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KYm56IG1haW5fbDQKZXJyCm1haW5fbDQ6CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCj09CmFzc2VydApwdXNoaW50IDEgLy8gMQpyZXR1cm4=",
+    "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMSA2CmJ5dGVjYmxvY2sgMHggMHg3MjY1NzM2NTcyNzY2NTVmNjk2NCAweDYzNmY3MjY1NWY2MTcwNzA1ZjY5NjQgMHg3Mzc0NmY3MjYxNjc2NTVmNjE2MzYzNmY3NTZlNzQKdHhuIE51bUFwcEFyZ3MKaW50Y18wIC8vIDAKPT0KYm56IG1haW5fbDYKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHgxYmYxNjllMSAvLyAiY29uZmlndXJlKHVpbnQ2NCxhZGRyZXNzLHVpbnQ2NCx1aW50NjQpdm9pZCIKPT0KYm56IG1haW5fbDUKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHg5MDNmNDUzNSAvLyAicG9ydGFsX3RyYW5zZmVyKGJ5dGVbXSlieXRlW10iCj09CmJueiBtYWluX2w0CmVycgptYWluX2w0Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIHBvcnRhbHRyYW5zZmVyY2FzdGVyXzQKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDU6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKIT0KJiYKYXNzZXJ0CmNhbGxzdWIgY29uZmlndXJlY2FzdGVyXzMKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDY6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KYm56IG1haW5fbDgKZXJyCm1haW5fbDg6CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCj09CmFzc2VydAppbnRjXzEgLy8gMQpyZXR1cm4KCi8vIF9taW50Cm1pbnRfMDoKcHJvdG8gMiAwCml0eG5fYmVnaW4KaW50Y18yIC8vIGFwcGwKaXR4bl9maWVsZCBUeXBlRW51bQpieXRlY18xIC8vICJyZXNlcnZlX2lkIgphcHBfZ2xvYmFsX2dldAppdHhuX2ZpZWxkIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIE5vT3AKaXR4bl9maWVsZCBPbkNvbXBsZXRpb24KcHVzaGJ5dGVzIDB4NmQ2OTZlNzQ1ZjcwNmY3Mjc0NjE2MjZjNjU1Zjc0NmY2YjY1NmUgLy8gIm1pbnRfcG9ydGFibGVfdG9rZW4iCml0eG5fZmllbGQgQXBwbGljYXRpb25BcmdzCmZyYW1lX2RpZyAtMgppdHhuX2ZpZWxkIEFwcGxpY2F0aW9uQXJncwpmcmFtZV9kaWcgLTEKaXR4bl9maWVsZCBBcHBsaWNhdGlvbkFyZ3MKaXR4bl9zdWJtaXQKcmV0c3ViCgovLyBjb25maWd1cmUKY29uZmlndXJlXzE6CnByb3RvIDQgMAp0eG4gU2VuZGVyCmdsb2JhbCBDcmVhdG9yQWRkcmVzcwo9PQovLyB1bmF1dGhvcml6ZWQKYXNzZXJ0CmludGNfMCAvLyAwCmJ5dGVjXzIgLy8gImNvcmVfYXBwX2lkIgphcHBfZ2xvYmFsX2dldF9leApzdG9yZSAxCnN0b3JlIDAKbG9hZCAxCiEKYXNzZXJ0CmJ5dGVjXzIgLy8gImNvcmVfYXBwX2lkIgpmcmFtZV9kaWcgLTQKYXBwX2dsb2JhbF9wdXQKaW50Y18wIC8vIDAKYnl0ZWNfMyAvLyAic3RvcmFnZV9hY2NvdW50IgphcHBfZ2xvYmFsX2dldF9leApzdG9yZSAzCnN0b3JlIDIKbG9hZCAzCiEKYXNzZXJ0CmJ5dGVjXzMgLy8gInN0b3JhZ2VfYWNjb3VudCIKZnJhbWVfZGlnIC0zCmFwcF9nbG9iYWxfcHV0CnB1c2hieXRlcyAweDYxNzM3MzY1NzQ1ZjY5NjQgLy8gImFzc2V0X2lkIgpmcmFtZV9kaWcgLTIKYXBwX2dsb2JhbF9wdXQKYnl0ZWNfMSAvLyAicmVzZXJ2ZV9pZCIKZnJhbWVfZGlnIC0xCmFwcF9nbG9iYWxfcHV0CnJldHN1YgoKLy8gcG9ydGFsX3RyYW5zZmVyCnBvcnRhbHRyYW5zZmVyXzI6CnByb3RvIDEgMQpieXRlY18wIC8vICIiCmludGNfMCAvLyAwCmR1cG4gNQpieXRlY18wIC8vICIiCmludGNfMCAvLyAwCmR1cG4gMgpieXRlY18wIC8vICIiCmR1cAppbnRjXzAgLy8gMApieXRlY18wIC8vICIiCmludGNfMCAvLyAwCmJ5dGVjXzAgLy8gIiIKZnJhbWVfZGlnIC0xCmV4dHJhY3QgMiAwCmludGNfMCAvLyAwCmdldGJ5dGUKZnJhbWVfYnVyeSAxCmZyYW1lX2RpZyAtMQpleHRyYWN0IDIgMAppbnRjXzEgLy8gMQpleHRyYWN0X3VpbnQzMgpmcmFtZV9idXJ5IDIKZnJhbWVfZGlnIC0xCmV4dHJhY3QgMiAwCnB1c2hpbnQgNSAvLyA1CmdldGJ5dGUKZnJhbWVfYnVyeSAzCmZyYW1lX2RpZyAtMQpleHRyYWN0IDIgMAppbnRjXzIgLy8gNgpmcmFtZV9kaWcgMwpwdXNoaW50IDY2IC8vIDY2CioKKwpkaWcgMQpsZW4Kc3Vic3RyaW5nMwpzdG9yZSA0CmxvYWQgNAppbnRjXzAgLy8gMApleHRyYWN0X3VpbnQzMgpmcmFtZV9idXJ5IDQKbG9hZCA0CnB1c2hpbnQgNCAvLyA0CmV4dHJhY3RfdWludDMyCmZyYW1lX2J1cnkgNQpsb2FkIDQKcHVzaGludCA4IC8vIDgKZXh0cmFjdF91aW50MTYKZnJhbWVfYnVyeSA2CmxvYWQgNApleHRyYWN0IDEwIDMyCmZyYW1lX2J1cnkgNwpsb2FkIDQKcHVzaGludCA0MiAvLyA0MgpleHRyYWN0X3VpbnQ2NApmcmFtZV9idXJ5IDgKbG9hZCA0CnB1c2hpbnQgNTAgLy8gNTAKZ2V0Ynl0ZQpmcmFtZV9idXJ5IDkKbG9hZCA0CnB1c2hpbnQgNTEgLy8gNTEKZ2V0Ynl0ZQpmcmFtZV9idXJ5IDEwCmxvYWQgNApleHRyYWN0IDUyIDMyCmZyYW1lX2J1cnkgMTEKbG9hZCA0CmV4dHJhY3QgODQgMzIKZnJhbWVfYnVyeSAxMgpsb2FkIDQKcHVzaGludCAxMTYgLy8gMTE2CmV4dHJhY3RfdWludDE2CmZyYW1lX2J1cnkgMTMKbG9hZCA0CmV4dHJhY3QgMTE4IDMyCmZyYW1lX2J1cnkgMTQKbG9hZCA0CnB1c2hpbnQgMTUwIC8vIDE1MApleHRyYWN0X3VpbnQxNgpmcmFtZV9idXJ5IDE1CmxvYWQgNApleHRyYWN0IDE1MiAzMgpmcmFtZV9idXJ5IDE2CmZyYW1lX2RpZyAxMQpmcmFtZV9kaWcgMTQKY2FsbHN1YiBtaW50XzAKcmV0c3ViCgovLyBjb25maWd1cmVfY2FzdGVyCmNvbmZpZ3VyZWNhc3Rlcl8zOgpwcm90byAwIDAKaW50Y18wIC8vIDAKYnl0ZWNfMCAvLyAiIgppbnRjXzAgLy8gMApkdXAKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQpidG9pCmZyYW1lX2J1cnkgMAp0eG5hIEFwcGxpY2F0aW9uQXJncyAyCmZyYW1lX2J1cnkgMQp0eG5hIEFwcGxpY2F0aW9uQXJncyAzCmJ0b2kKZnJhbWVfYnVyeSAyCnR4bmEgQXBwbGljYXRpb25BcmdzIDQKYnRvaQpmcmFtZV9idXJ5IDMKZnJhbWVfZGlnIDAKZnJhbWVfZGlnIDEKZnJhbWVfZGlnIDIKZnJhbWVfZGlnIDMKY2FsbHN1YiBjb25maWd1cmVfMQpyZXRzdWIKCi8vIHBvcnRhbF90cmFuc2Zlcl9jYXN0ZXIKcG9ydGFsdHJhbnNmZXJjYXN0ZXJfNDoKcHJvdG8gMCAwCmJ5dGVjXzAgLy8gIiIKZHVwCnR4bmEgQXBwbGljYXRpb25BcmdzIDEKZnJhbWVfYnVyeSAxCmZyYW1lX2RpZyAxCmNhbGxzdWIgcG9ydGFsdHJhbnNmZXJfMgpmcmFtZV9idXJ5IDAKcHVzaGJ5dGVzIDB4MTUxZjdjNzUgLy8gMHgxNTFmN2M3NQpmcmFtZV9kaWcgMApjb25jYXQKbG9nCnJldHN1Yg==",
     "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
   },
   "state": {
     "global": {
-      "num_byte_slices": 0,
-      "num_uints": 0
+      "num_byte_slices": 1,
+      "num_uints": 3
     },
     "local": {
       "num_byte_slices": 0,
@@ -43,7 +54,28 @@ export const APP_SPEC: AppSpec = {
   },
   "schema": {
     "global": {
-      "declared": {},
+      "declared": {
+        "asset_id": {
+          "type": "uint64",
+          "key": "asset_id",
+          "descr": ""
+        },
+        "core_app_id": {
+          "type": "uint64",
+          "key": "core_app_id",
+          "descr": ""
+        },
+        "reserve_id": {
+          "type": "uint64",
+          "key": "reserve_id",
+          "descr": ""
+        },
+        "storage_account": {
+          "type": "bytes",
+          "key": "storage_account",
+          "descr": ""
+        }
+      },
       "reserved": {}
     },
     "local": {
@@ -53,7 +85,44 @@ export const APP_SPEC: AppSpec = {
   },
   "contract": {
     "name": "portal",
-    "methods": [],
+    "methods": [
+      {
+        "name": "configure",
+        "args": [
+          {
+            "type": "uint64",
+            "name": "app_id"
+          },
+          {
+            "type": "address",
+            "name": "storage_acc"
+          },
+          {
+            "type": "uint64",
+            "name": "asset_id"
+          },
+          {
+            "type": "uint64",
+            "name": "reserve_id"
+          }
+        ],
+        "returns": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "portal_transfer",
+        "args": [
+          {
+            "type": "byte[]",
+            "name": "vaa"
+          }
+        ],
+        "returns": {
+          "type": "byte[]"
+        }
+      }
+    ],
     "networks": {}
   },
   "bare_call_config": {
@@ -116,6 +185,34 @@ export type Portal = {
    * Maps method signatures / names to their argument and return types.
    */
   methods:
+    & Record<'configure(uint64,address,uint64,uint64)void' | 'configure', {
+      argsObj: {
+        app_id: bigint | number
+        storage_acc: string
+        asset_id: bigint | number
+        reserve_id: bigint | number
+      }
+      argsTuple: [app_id: bigint | number, storage_acc: string, asset_id: bigint | number, reserve_id: bigint | number]
+      returns: void
+    }>
+    & Record<'portal_transfer(byte[])byte[]' | 'portal_transfer', {
+      argsObj: {
+        vaa: Uint8Array
+      }
+      argsTuple: [vaa: Uint8Array]
+      returns: Uint8Array
+    }>
+  /**
+   * Defines the shape of the global and local state of the application.
+   */
+  state: {
+    global: {
+      'asset_id'?: IntegerState
+      'core_app_id'?: IntegerState
+      'reserve_id'?: IntegerState
+      'storage_account'?: BinaryState
+    }
+  }
 }
 /**
  * Defines the possible abi call signatures
@@ -187,6 +284,34 @@ export abstract class PortalCallFactory {
     }
   }
 
+  /**
+   * Constructs a no op call for the configure(uint64,address,uint64,uint64)void ABI method
+   *
+   * @param args Any args for the contract call
+   * @param params Any additional parameters for the call
+   * @returns A TypedCallParams object for the call
+   */
+  static configure(args: MethodArgs<'configure(uint64,address,uint64,uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+    return {
+      method: 'configure(uint64,address,uint64,uint64)void' as const,
+      methodArgs: Array.isArray(args) ? args : [args.app_id, args.storage_acc, args.asset_id, args.reserve_id],
+      ...params,
+    }
+  }
+  /**
+   * Constructs a no op call for the portal_transfer(byte[])byte[] ABI method
+   *
+   * @param args Any args for the contract call
+   * @param params Any additional parameters for the call
+   * @returns A TypedCallParams object for the call
+   */
+  static portalTransfer(args: MethodArgs<'portal_transfer(byte[])byte[]'>, params: AppClientCallCoreParams & CoreAppCallArgs) {
+    return {
+      method: 'portal_transfer(byte[])byte[]' as const,
+      methodArgs: Array.isArray(args) ? args : [args.vaa],
+      ...params,
+    }
+  }
 }
 
 /**
@@ -285,12 +410,109 @@ export class PortalClient {
     return this.appClient.clearState(args)
   }
 
+  /**
+   * Calls the configure(uint64,address,uint64,uint64)void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The result of the call
+   */
+  public configure(args: MethodArgs<'configure(uint64,address,uint64,uint64)void'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+    return this.call(PortalCallFactory.configure(args, params))
+  }
+
+  /**
+   * Calls the portal_transfer(byte[])byte[] ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The result of the call
+   */
+  public portalTransfer(args: MethodArgs<'portal_transfer(byte[])byte[]'>, params: AppClientCallCoreParams & CoreAppCallArgs = {}) {
+    return this.call(PortalCallFactory.portalTransfer(args, params))
+  }
+
+  /**
+   * Extracts a binary state value out of an AppState dictionary
+   *
+   * @param state The state dictionary containing the state value
+   * @param key The key of the state value
+   * @returns A BinaryState instance containing the state value, or undefined if the key was not found
+   */
+  private static getBinaryState(state: AppState, key: string): BinaryState | undefined {
+    const value = state[key]
+    if (!value) return undefined
+    if (!('valueRaw' in value))
+      throw new Error(`Failed to parse state value for ${key}; received an int when expected a byte array`)
+    return {
+      asString(): string {
+        return value.value
+      },
+      asByteArray(): Uint8Array {
+        return value.valueRaw
+      }
+    }
+  }
+
+  /**
+   * Extracts a integer state value out of an AppState dictionary
+   *
+   * @param state The state dictionary containing the state value
+   * @param key The key of the state value
+   * @returns An IntegerState instance containing the state value, or undefined if the key was not found
+   */
+  private static getIntegerState(state: AppState, key: string): IntegerState | undefined {
+    const value = state[key]
+    if (!value) return undefined
+    if ('valueRaw' in value)
+      throw new Error(`Failed to parse state value for ${key}; received a byte array when expected a number`)
+    return {
+      asBigInt() {
+        return typeof value.value === 'bigint' ? value.value : BigInt(value.value)
+      },
+      asNumber(): number {
+        return typeof value.value === 'bigint' ? Number(value.value) : value.value
+      },
+    }
+  }
+
+  /**
+   * Returns the smart contract's global state wrapped in a strongly typed accessor with options to format the stored value
+   */
+  public async getGlobalState(): Promise<Portal['state']['global']> {
+    const state = await this.appClient.getGlobalState()
+    return {
+      get asset_id() {
+        return PortalClient.getIntegerState(state, 'asset_id')
+      },
+      get core_app_id() {
+        return PortalClient.getIntegerState(state, 'core_app_id')
+      },
+      get reserve_id() {
+        return PortalClient.getIntegerState(state, 'reserve_id')
+      },
+      get storage_account() {
+        return PortalClient.getBinaryState(state, 'storage_account')
+      },
+    }
+  }
+
   public compose(): PortalComposer {
     const client = this
     const atc = new AtomicTransactionComposer()
     let promiseChain:Promise<unknown> = Promise.resolve()
     const resultMappers: Array<undefined | ((x: any) => any)> = []
     return {
+      configure(args: MethodArgs<'configure(uint64,address,uint64,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+        promiseChain = promiseChain.then(() => client.configure(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
+        resultMappers.push(undefined)
+        return this
+      },
+      portalTransfer(args: MethodArgs<'portal_transfer(byte[])byte[]'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
+        promiseChain = promiseChain.then(() => client.portalTransfer(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
+        resultMappers.push(undefined)
+        return this
+      },
       clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.clearState({...args, sendParams: {...args?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
@@ -316,6 +538,24 @@ export class PortalClient {
   }
 }
 export type PortalComposer<TReturns extends [...any[]] = []> = {
+  /**
+   * Calls the configure(uint64,address,uint64,uint64)void ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+   */
+  configure(args: MethodArgs<'configure(uint64,address,uint64,uint64)void'>, params?: AppClientCallCoreParams & CoreAppCallArgs): PortalComposer<[...TReturns, MethodReturn<'configure(uint64,address,uint64,uint64)void'>]>
+
+  /**
+   * Calls the portal_transfer(byte[])byte[] ABI method.
+   *
+   * @param args The arguments for the contract call
+   * @param params Any additional parameters for the call
+   * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
+   */
+  portalTransfer(args: MethodArgs<'portal_transfer(byte[])byte[]'>, params?: AppClientCallCoreParams & CoreAppCallArgs): PortalComposer<[...TReturns, MethodReturn<'portal_transfer(byte[])byte[]'>]>
+
   /**
    * Makes a clear_state call to an existing instance of the portal smart contract.
    *
