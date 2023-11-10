@@ -33,17 +33,15 @@ app = beaker.Application(
 
 @pt.Subroutine(TealType.none)
 def _mint(amount: Expr, to: Expr):
-    return pt.InnerTxnBuilder.Execute(
-        {
-            TxnField.type_enum: TxnType.ApplicationCall,
-            TxnField.application_id: app.state.reserve_id.get(),
-            TxnField.on_completion: pt.OnComplete.NoOp,
-            TxnField.application_args: [
-                pt.Bytes("mint_portable_token"),
-                amount,
-                to,
-            ],
-        }
+    return Seq(
+        pt.InnerTxnBuilder.Begin(),
+        pt.InnerTxnBuilder.MethodCall(
+            app_id=app.state.reserve_id.get(),
+            method_signature="mint_portable_token(uint64,account)void",
+            args=[pt.Itob(amount), to],
+            extra_fields={TxnField.assets: [app.state.asset_id.get()]},
+        ),
+        pt.InnerTxnBuilder.Submit(),
     )
 
 
