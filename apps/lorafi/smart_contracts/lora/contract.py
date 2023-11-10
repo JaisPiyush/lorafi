@@ -1,6 +1,6 @@
 import beaker
 import pyteal as pt
-from pyteal import Seq, Assert, TealType, TxnField, TxnType, Expr, abi
+from pyteal import Seq, Assert, TealType, TxnField, TxnType, Expr, abi, Int
 
 
 FACTOR = pt.Int(100_000)
@@ -37,7 +37,6 @@ def _transfer(asset_id: Expr, amount: Expr, sender: Expr, receiver: Expr) -> Exp
             TxnField.asset_amount: amount,
             TxnField.sender: sender,
             TxnField.asset_receiver: receiver,
-            TxnField.assets: [asset_id],
         }
     )
 
@@ -80,36 +79,37 @@ def configure(
 @pt.Subroutine(TealType.none)
 def _mint(principal: Expr, yield_amount: Expr, to: abi.Account):
     return Seq(
-        pt.InnerTxnBuilder.Execute(
-            {
-                TxnField.type_enum: TxnType.ApplicationCall,
-                TxnField.application_id: app.state.reserve_id.get(),
-                TxnField.on_completion: pt.OnComplete.NoOp,
-                TxnField.application_args: [
-                    pt.Bytes("mint_yield_token_pair"),
-                    principal,
-                    yield_amount,
-                    to.address(),
-                ],
-            }
-        )
+        pt.InnerTxnBuilder.Begin(),
+        pt.InnerTxnBuilder.MethodCall(
+            app_id=app.state.reserve_id.get(),
+            method_signature="mint_yield_token_pair(uint64,uint64,account)void",
+            args=[pt.Itob(principal), pt.Itob(yield_amount), to],
+            extra_fields={
+                TxnField.assets: [
+                    app.state.asset_id.get(),
+                    app.state.pt_id.get(),
+                    app.state.yt_id.get(),
+                ]
+            },
+        ),
+        pt.InnerTxnBuilder.Submit(),
     )
 
 
 @app.external
-def mint(asset: abi.AssetTransferTransaction, to: abi.Account):
+def mint(to: abi.Account):
     return Seq(
         Assert(
-            asset.get().xfer_asset() == app.state.asset_id.get(),
+            pt.Gtxn[0].xfer_asset() == app.state.asset_id.get(),
             comment="asset not supported",
         ),
         _mint(
             pt.Mul(
-                asset.get().asset_amount(),
+                pt.Gtxn[0].asset_amount(),
                 pt.Div(pt.Minus(FACTOR, app.state.rate.get()), FACTOR),
             ),
             pt.Mul(
-                asset.get().asset_amount(),
+                pt.Gtxn[0].asset_amount(),
                 pt.Div(app.state.rate.get(), FACTOR),
             ),
             to,
