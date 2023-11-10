@@ -6,7 +6,7 @@ from pyteal import abi, TxnField, TxnType, Expr
 # / --- --- UNDERLYING ASA CONFIG
 UNDERLYING_ASA_TOTAL = pt.Int(2**64 - 1)
 UNDERLYING_ASA_DECIMALS = pt.Int(0)
-UNDERLYING_ASA_DEFAULT_FROZEN = pt.Int(1)
+UNDERLYING_ASA_DEFAULT_FROZEN = pt.Int(0)
 UNDERLYING_ASA_MANAGER_ADDR = pt.Global.current_application_address()
 UNDERLYING_ASA_RESERVE_ADDR = pt.Global.current_application_address()
 UNDERLYING_ASA_FREEZE_ADDR = pt.Global.current_application_address()
@@ -101,7 +101,6 @@ def asa_mint_inner_txn(
             TxnField.asset_amount: amount.get(),
             TxnField.sender: pt.Global.current_application_address(),
             TxnField.asset_receiver: receiver.address(),
-            TxnField.assets: [asset_id],
         }
     )
 

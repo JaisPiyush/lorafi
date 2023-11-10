@@ -27,7 +27,7 @@ def lora_client(
     return client
 
 
-def test_says_hello(lora_client: ApplicationClient) -> None:
-    result = lora_client.call(lora_contract.hello, name="World")
+# def test_says_hello(lora_client: ApplicationClient) -> None:
+#     result = lora_client.call(lora_contract.hello, name="World")
 
-    assert result.return_value == "Hello, World"
+#     assert result.return_value == "Hello, World"

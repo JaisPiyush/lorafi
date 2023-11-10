@@ -6,7 +6,7 @@ from pyteal import abi, Seq, Assert, TealType, Expr, TxnField, TxnType
 # / --- --- UNDERLYING ASA CONFIG
 UNDERLYING_ASA_TOTAL = pt.Int(2**64 - 1)
 UNDERLYING_ASA_DECIMALS = pt.Int(0)
-UNDERLYING_ASA_DEFAULT_FROZEN = pt.Int(1)
+UNDERLYING_ASA_DEFAULT_FROZEN = pt.Int(0)
 UNDERLYING_ASA_MANAGER_ADDR = pt.Global.current_application_address()
 UNDERLYING_ASA_RESERVE_ADDR = pt.Global.current_application_address()
 UNDERLYING_ASA_FREEZE_ADDR = pt.Global.current_application_address()
