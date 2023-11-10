@@ -126,28 +126,26 @@ def mint_on_command(
 
 @app.external
 def burn(
-    _pt: abi.AssetTransferTransaction,
-    _yt: abi.AssetTransferTransaction,
     to: abi.Account,
 ):
     amount = pt.ScratchVar(TealType.uint64)
     return Seq(
         Assert(
-            _pt.get().xfer_asset() == app.state.pt_id.get(),
+            pt.Gtxn[0].xfer_asset() == app.state.pt_id.get(),
             comment="principal token expected",
         ),
         Assert(
-            _yt.get().xfer_asset() == app.state.yt_id.get(),
+            pt.Gtxn[1].xfer_asset() == app.state.yt_id.get(),
             comment="yield token expected",
         ),
         amount.store(
             pt.Mul(
-                _pt.get().asset_amount(),
+                pt.Gtxn[0].asset_amount(),
                 pt.Div(FACTOR, pt.Minus(FACTOR, app.state.rate.get())),
             )
         ),
         pt.Assert(
-            _yt.get().asset_amount() >= amount.load() - _pt.get().asset_amount(),
+            pt.Gtxn[1].asset_amount() >= amount.load() - pt.Gtxn[0].asset_amount(),
             comment="insufficient yield token",
         ),
         _transfer(
@@ -157,11 +155,11 @@ def burn(
             to.address(),
         ),
         pt.If(
-            _yt.get().asset_amount() - amount.load() - _pt.get().asset_amount()
+            pt.Gtxn[1].asset_amount() - amount.load() - pt.Gtxn[0].asset_amount()
             > pt.Int(0),
             _transfer(
-                _yt.get().xfer_asset(),
-                _yt.get().asset_amount() - amount.load() - _pt.get().asset_amount(),
+                pt.Gtxn[1].xfer_asset(),
+                pt.Gtxn[1].asset_amount() - amount.load() - pt.Gtxn[0].asset_amount(),
                 pt.Global.current_application_address(),
                 to.address(),
             ),

@@ -82,7 +82,7 @@ def pre_condition_asset_check(asset_1: Expr, asset_2: Expr) -> Expr:
             pt.And(
                 pt.Or(
                     asset_1 == app.state.asset_1_id.get(),
-                    # asset_1.get() == app.state.asset_2_id.get(),
+                    # pt.Gtxn[0] == app.state.asset_2_id.get(),
                 ),
                 pt.Or(
                     asset_2 == app.state.asset_1_id.get(),
@@ -113,7 +113,6 @@ def _mint(address: Expr, amount: Expr) -> Expr:
                 TxnField.sender: pt.Global.current_application_address(),
                 TxnField.asset_receiver: address,
                 TxnField.asset_amount: amount,
-                TxnField.assets: [app.state.lp_asset_id.get()],
             }
         ),
         app.state.total_supply.set(app.state.total_supply.get() + amount),
@@ -130,7 +129,6 @@ def _transfer(asset: Expr, address: Expr, amount: Expr) -> Expr:
                 TxnField.sender: pt.Global.current_application_address(),
                 TxnField.asset_receiver: address,
                 TxnField.asset_amount: amount,
-                TxnField.assets: [asset],
             }
         )
     )
@@ -143,23 +141,17 @@ def min(a: Expr, b: Expr) -> Expr:
 
 @app.external
 def deposit(
-    asset_1: abi.AssetTransferTransaction,
-    asset_2: abi.AssetTransferTransaction,
     to: abi.Account,
 ) -> Expr:
     liquidity = pt.ScratchVar(TealType.uint64)
     return Seq(
-        pre_condition_asset_check(
-            asset_1.get().xfer_asset(), asset_2.get().xfer_asset()
-        ),
+        pre_condition_asset_check(pt.Gtxn[0].xfer_asset(), pt.Gtxn[1].xfer_asset()),
         pt.If(app.state.total_supply.get() == pt.Int(0))
         .Then(
             liquidity.store(
                 pt.Sqrt(
                     pt.Minus(
-                        pt.Mul(
-                            asset_1.get().asset_amount(), asset_2.get().asset_amount()
-                        ),
+                        pt.Mul(pt.Gtxn[0].asset_amount(), pt.Gtxn[1].asset_amount()),
                         MINIMUM_LIQUIDITY,
                     )
                 )
@@ -170,15 +162,11 @@ def deposit(
             liquidity.store(
                 min(
                     pt.Div(
-                        pt.Mul(
-                            asset_1.get().asset_amount(), app.state.total_supply.get()
-                        ),
+                        pt.Mul(pt.Gtxn[0].asset_amount(), app.state.total_supply.get()),
                         app.state.asset_1_reserve.get(),
                     ),
                     pt.Div(
-                        pt.Mul(
-                            asset_2.get().asset_amount(), app.state.total_supply.get()
-                        ),
+                        pt.Mul(pt.Gtxn[1].asset_amount(), app.state.total_supply.get()),
                         app.state.asset_2_reserve.get(),
                     ),
                 )
@@ -186,10 +174,10 @@ def deposit(
         ),
         _mint(to.address(), liquidity.load()),
         app.state.asset_1_reserve.set(
-            app.state.asset_1_reserve.get() + asset_1.get().asset_amount()
+            app.state.asset_1_reserve.get() + pt.Gtxn[0].asset_amount()
         ),
         app.state.asset_2_reserve.set(
-            app.state.asset_2_reserve.get() + asset_2.get().asset_amount()
+            app.state.asset_2_reserve.get() + pt.Gtxn[1].asset_amount()
         ),
         sync_k_constant(),
         pt.Approve(),
@@ -197,23 +185,23 @@ def deposit(
 
 
 @app.external
-def burn(asset: abi.AssetTransferTransaction, to: abi.Account):
+def burn(to: abi.Account):
     amount_1 = pt.ScratchVar(TealType.uint64)
     amount_2 = pt.ScratchVar(TealType.uint64)
     return Seq(
         Assert(
-            asset.get().xfer_asset() == app.state.lp_asset_id.get(),
+            pt.Gtxn[0].xfer_asset() == app.state.lp_asset_id.get(),
             comment="Not Pool LP Token",
         ),
         amount_1.store(
             pt.Div(
-                pt.Mul(asset.get().asset_amount(), app.state.asset_1_reserve.get()),
+                pt.Mul(pt.Gtxn[0].asset_amount(), app.state.asset_1_reserve.get()),
                 app.state.total_supply.get(),
             )
         ),
         amount_2.store(
             pt.Div(
-                pt.Mul(asset.get().asset_amount(), app.state.asset_2_reserve.get()),
+                pt.Mul(pt.Gtxn[0].asset_amount(), app.state.asset_2_reserve.get()),
                 app.state.total_supply.get(),
             )
         ),
@@ -230,7 +218,7 @@ def burn(asset: abi.AssetTransferTransaction, to: abi.Account):
         _transfer(app.state.asset_1_id.get(), to.address(), amount_1.load()),
         _transfer(app.state.asset_2_id.get(), to.address(), amount_2.load()),
         app.state.total_supply.set(
-            app.state.total_supply.get() - asset.get().asset_amount()
+            app.state.total_supply.get() - pt.Gtxn[0].asset_amount()
         ),
         sync_k_constant(),
         pt.Approve(),
@@ -239,7 +227,7 @@ def burn(asset: abi.AssetTransferTransaction, to: abi.Account):
 
 # TODO: function to swap
 @app.external
-def swap(asset: abi.AssetTransferTransaction, to: abi.Account):
+def swap(to: abi.Account):
     asset_in = pt.ScratchVar(TealType.uint64)
     asset_in_reserve = pt.ScratchVar(TealType.uint64)
     asset_out_reserve = pt.ScratchVar(TealType.uint64)
@@ -248,13 +236,13 @@ def swap(asset: abi.AssetTransferTransaction, to: abi.Account):
     return Seq(
         Assert(
             pt.Or(
-                asset.get().xfer_asset() == app.state.asset_1_id.get(),
-                asset.get().xfer_asset() == app.state.asset_2_id.get(),
+                pt.Gtxn[0].xfer_asset() == app.state.asset_1_id.get(),
+                pt.Gtxn[0].xfer_asset() == app.state.asset_2_id.get(),
             ),
             comment="asset not recognized",
         ),
         pt.If(
-            asset.get().xfer_asset() == app.state.asset_1_id.get(),
+            pt.Gtxn[0].xfer_asset() == app.state.asset_1_id.get(),
         )
         .Then(
             Seq(asset_in.store(app.state.asset_1_id.get())),
@@ -272,7 +260,7 @@ def swap(asset: abi.AssetTransferTransaction, to: abi.Account):
             pt.Minus(
                 pt.Div(
                     app.state.k_constant.get(),
-                    pt.Add(asset_in_reserve.load(), asset.get().asset_amount()),
+                    pt.Add(asset_in_reserve.load(), pt.Gtxn[0].asset_amount()),
                 ),
                 asset_out_reserve.load(),
             )
@@ -281,10 +269,10 @@ def swap(asset: abi.AssetTransferTransaction, to: abi.Account):
             amount_out.load() < asset_out_reserve.load(),
             comment="insufficient liquidity",
         ),
-        pt.If(asset.get().xfer_asset() == app.state.asset_1_id.get())
+        pt.If(pt.Gtxn[0].xfer_asset() == app.state.asset_1_id.get())
         .Then(
             app.state.asset_1_reserve.set(
-                app.state.asset_1_reserve.get() + asset.get().asset_amount()
+                app.state.asset_1_reserve.get() + pt.Gtxn[0].asset_amount()
             ),
             app.state.asset_2_reserve.set(
                 app.state.asset_2_reserve.get() - amount_out.load()
@@ -292,7 +280,7 @@ def swap(asset: abi.AssetTransferTransaction, to: abi.Account):
         )
         .Else(
             app.state.asset_2_reserve.set(
-                app.state.asset_2_reserve.get() + asset.get().asset_amount()
+                app.state.asset_2_reserve.get() + pt.Gtxn[0].asset_amount()
             ),
             app.state.asset_1_reserve.set(
                 app.state.asset_1_reserve.get() - amount_out.load()
