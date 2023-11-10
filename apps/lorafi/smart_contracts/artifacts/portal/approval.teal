@@ -125,6 +125,7 @@ intc_0 // 0
 bytec_0 // ""
 intc_0 // 0
 bytec_0 // ""
+dupn 2
 frame_dig -1
 extract 2 0
 intc_0 // 0
@@ -198,8 +199,21 @@ frame_bury 15
 load 4
 extract 152 32
 frame_bury 16
+load 4
+extract 184 32
+frame_bury 17
+load 4
+extract 216 0
+frame_bury 18
+frame_dig 18
+len
+itob
+extract 6 0
+frame_dig 18
+concat
+frame_bury 18
 frame_dig 11
-frame_dig 14
+frame_dig 17
 callsub mint_0
 retsub
 

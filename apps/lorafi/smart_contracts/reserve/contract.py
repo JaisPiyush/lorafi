@@ -78,6 +78,15 @@ def create_asa(
             }
         ),
         output.set(pt.InnerTxn.created_asset_id()),
+        pt.InnerTxnBuilder.Execute(
+            {
+                TxnField.type_enum: TxnType.AssetTransfer,
+                TxnField.xfer_asset: pt.InnerTxn.created_asset_id(),
+                TxnField.asset_amount: pt.Int(0),
+                TxnField.sender: pt.Global.current_application_address(),
+                TxnField.asset_receiver: pt.Global.current_application_address(),
+            }
+        ),
     )
 
 
@@ -90,8 +99,9 @@ def asa_mint_inner_txn(
             TxnField.type_enum: TxnType.AssetTransfer,
             TxnField.xfer_asset: asset_id,
             TxnField.asset_amount: amount.get(),
-            TxnField.asset_sender: pt.Global.current_application_address(),
+            TxnField.sender: pt.Global.current_application_address(),
             TxnField.asset_receiver: receiver.address(),
+            TxnField.assets: [asset_id],
         }
     )
 

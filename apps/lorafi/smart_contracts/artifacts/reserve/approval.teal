@@ -1,5 +1,5 @@
 #pragma version 8
-intcblock 0 1
+intcblock 0 1 4
 bytecblock 0x757364745f746f6b656e5f6964 0x757364745f746f6b656e5f636f6d6d616e646572 0x706f727461626c655f61737365745f6964 0x706f7274616c5f61737365745f636f6d6d616e646572 0x7072696e636970616c5f746f6b656e5f6964 0x7969656c645f746f6b656e5f6964 0x6d61726b65745f746f6b656e5f636f6d6d616e646572
 txn NumAppArgs
 intc_0 // 0
@@ -244,23 +244,37 @@ itxn_field ConfigAssetClawback
 itxn_submit
 itxn CreatedAssetID
 frame_bury 0
+itxn_begin
+intc_2 // axfer
+itxn_field TypeEnum
+itxn CreatedAssetID
+itxn_field XferAsset
+intc_0 // 0
+itxn_field AssetAmount
+global CurrentApplicationAddress
+itxn_field Sender
+global CurrentApplicationAddress
+itxn_field AssetReceiver
+itxn_submit
 retsub
 
 // asa_mint_inner_txn
 asamintinnertxn_4:
 proto 3 0
 itxn_begin
-pushint 4 // axfer
+intc_2 // axfer
 itxn_field TypeEnum
 frame_dig -3
 itxn_field XferAsset
 frame_dig -1
 itxn_field AssetAmount
 global CurrentApplicationAddress
-itxn_field AssetSender
+itxn_field Sender
 frame_dig -2
 txnas Accounts
 itxn_field AssetReceiver
+frame_dig -3
+itxn_field Assets
 itxn_submit
 retsub
 

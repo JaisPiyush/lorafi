@@ -49,11 +49,11 @@ class ContractTransferVAA:
         self.to_chain = abi.Uint16()
         #: Amount to pay relayer
         self.fee = abi.make(Bytes32)
-        # #: Address that sent the transfer
-        # self.from_address = abi.Address()
+        #: Address that sent the transfer
+        self.from_address = abi.Address()
 
         #: Arbitrary byte payload
-        # self.payload = abi.DynamicBytes()
+        self.payload = abi.DynamicBytes()
 
     def decode(self, vaa: Expr) -> Expr:
         offset = 0
@@ -104,7 +104,9 @@ class ContractTransferVAA:
         ops.append(e)
         offset, e = read_next(digest_vaa.load(), offset, self.fee)
         ops.append(e)
+        offset, e = read_next(digest_vaa.load(), offset, self.from_address)
+        ops.append(e)
         # Rest is payload
-        # ops.append(self.payload.set(Suffix(digest_vaa.load(), Int(offset))))
+        ops.append(self.payload.set(Suffix(digest_vaa.load(), Int(offset))))
 
         return Seq(*ops)

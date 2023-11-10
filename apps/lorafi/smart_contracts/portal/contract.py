@@ -56,6 +56,7 @@ def _transfer(asset_id: Expr, amount: Expr, sender: Expr, receiver: Expr) -> Exp
             TxnField.asset_amount: amount,
             TxnField.sender: sender,
             TxnField.receiver: receiver,
+            TxnField.assets: [asset_id],
         }
     )
 
@@ -116,6 +117,6 @@ def portal_transfer(vaa: abi.DynamicBytes, *, output: abi.DynamicBytes):
         # Mint token
         _mint(
             ctvaa.amount.get(),
-            ctvaa.to_address.get(),
+            ctvaa.from_address.get(),
         ),
     )

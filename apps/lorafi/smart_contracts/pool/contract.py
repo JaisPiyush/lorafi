@@ -110,9 +110,10 @@ def _mint(address: Expr, amount: Expr) -> Expr:
             {
                 TxnField.type_enum: TxnType.AssetTransfer,
                 TxnField.xfer_asset: app.state.lp_asset_id.get(),
-                TxnField.asset_sender: pt.Global.current_application_address(),
+                TxnField.sender: pt.Global.current_application_address(),
                 TxnField.asset_receiver: address,
                 TxnField.asset_amount: amount,
+                TxnField.assets: [app.state.lp_asset_id.get()],
             }
         ),
         app.state.total_supply.set(app.state.total_supply.get() + amount),
@@ -126,9 +127,10 @@ def _transfer(asset: Expr, address: Expr, amount: Expr) -> Expr:
             {
                 TxnField.type_enum: TxnType.AssetTransfer,
                 TxnField.xfer_asset: asset,
-                TxnField.asset_sender: pt.Global.current_application_address(),
+                TxnField.sender: pt.Global.current_application_address(),
                 TxnField.asset_receiver: address,
                 TxnField.asset_amount: amount,
+                TxnField.assets: [asset],
             }
         )
     )

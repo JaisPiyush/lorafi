@@ -36,7 +36,8 @@ def _transfer(asset_id: Expr, amount: Expr, sender: Expr, receiver: Expr) -> Exp
             TxnField.xfer_asset: asset_id,
             TxnField.asset_amount: amount,
             TxnField.sender: sender,
-            TxnField.receiver: receiver,
+            TxnField.asset_receiver: receiver,
+            TxnField.assets: [asset_id],
         }
     )
 
@@ -56,7 +57,7 @@ def configure(
         app.state.pt_id.set(_pt.asset_id()),
         app.state.yt_id.set(_yt.asset_id()),
         _transfer(
-            app.state.asset_id.get(),
+            asset.asset_id(),
             pt.Int(0),
             pt.Global.current_application_address(),
             pt.Global.current_application_address(),

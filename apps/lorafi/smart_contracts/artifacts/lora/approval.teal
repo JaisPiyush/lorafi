@@ -134,7 +134,9 @@ itxn_field AssetAmount
 frame_dig -2
 itxn_field Sender
 frame_dig -1
-itxn_field Receiver
+itxn_field AssetReceiver
+frame_dig -4
+itxn_field Assets
 itxn_submit
 retsub
 
@@ -166,8 +168,8 @@ bytec 5 // "yt_id"
 frame_dig -1
 txnas Assets
 app_global_put
-bytec_1 // "asset_id"
-app_global_get
+frame_dig -4
+txnas Assets
 intc_0 // 0
 global CurrentApplicationAddress
 global CurrentApplicationAddress

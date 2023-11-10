@@ -211,11 +211,14 @@ bytec 4 // "lp_asset_id"
 app_global_get
 itxn_field XferAsset
 global CurrentApplicationAddress
-itxn_field AssetSender
+itxn_field Sender
 frame_dig -2
 itxn_field AssetReceiver
 frame_dig -1
 itxn_field AssetAmount
+bytec 4 // "lp_asset_id"
+app_global_get
+itxn_field Assets
 itxn_submit
 bytec_3 // "total_supply"
 bytec_3 // "total_supply"
@@ -234,11 +237,13 @@ itxn_field TypeEnum
 frame_dig -3
 itxn_field XferAsset
 global CurrentApplicationAddress
-itxn_field AssetSender
+itxn_field Sender
 frame_dig -2
 itxn_field AssetReceiver
 frame_dig -1
 itxn_field AssetAmount
+frame_dig -3
+itxn_field Assets
 itxn_submit
 retsub
 
