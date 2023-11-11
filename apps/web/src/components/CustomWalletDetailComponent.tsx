@@ -8,9 +8,11 @@ import { Stack } from '@mui/material';
 
 interface CustomWalletDetailComponentProps {
   style?: React.CSSProperties;
+  address: string;
+  onClose: () => void;
 }
 
-const CustomWalletDetailComponent: React.FC<CustomWalletDetailComponentProps> = ({ style }) => {
+const CustomWalletDetailComponent: React.FC<CustomWalletDetailComponentProps> = ({ style, address, onClose }) => {
 
   return (
     <Paper
@@ -19,17 +21,19 @@ const CustomWalletDetailComponent: React.FC<CustomWalletDetailComponentProps> = 
       sx={{ ...style, padding: 0 }}
     >
       <Stack direction="row">
-        <IconButton sx={{ p: '10px' }} aria-label="menu">
-          <CloseIcon />
-        </IconButton>
-        <Divider sx={{ height: 35, m: 0.5 }} orientation="vertical" />
+        
+        
         <InputBase
-          sx={{ ml: 1, flex: 1 }}
+          sx={{ ml: 1, flex: 1}}
           placeholder="Placeholder Text"
           inputProps={{ 'aria-label': 'Placeholder Text' }}
           disabled
-          value={"123123"}
+          value={address}
         />
+        <Divider sx={{ height: 35, m: 0.5 }} orientation="vertical" />
+        <IconButton sx={{ p: '10px' }} aria-label="menu" onClick={() => {onClose()}}>
+          <CloseIcon />
+        </IconButton>
       </Stack>
 
     </Paper>

@@ -4,11 +4,30 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
 
+import { useMyAlgoConnect } from '../hooks/useMyAlgoConnect';
+import { useState } from 'react';
+import CustomWalletDetailComponent from './CustomWalletDetailComponent';
+
+
+
 
 
 function AppBarComponent() {
+  const myAlgoConnect = useMyAlgoConnect();
+  const [hasConnected, setHasConnected] = useState<boolean>(false)
+  const [address, setAddress] = useState<string>('')
 
-  const handleOnConnectWallet = () => {}
+  // Check if wallet is already connected and trigger wallet connection upon no connected wallet
+  // TODO(store): Account store to save connected wallet data and connection status
+  const handleOnConnectWallet = async () => {
+    if (hasConnected) return;
+    const accountsSharedByUser = await myAlgoConnect.connect({
+      shouldSelectOneAccount: true
+    });
+    setHasConnected(true)
+    setAddress(accountsSharedByUser[0].address)
+
+  }
 
   return (
     <AppBar position="static" sx={{ backgroundColor: 'black' }}>
@@ -29,7 +48,13 @@ function AppBarComponent() {
           </Box>
 
           {/* Button at the right end */}
-          <Button color="inherit" onClick={() => {handleOnConnectWallet()}}>Connect Wallet</Button>
+          {
+            (!hasConnected) ? <Button color="inherit" onClick={() => {handleOnConnectWallet()}}>Connect Wallet</Button>:
+            <CustomWalletDetailComponent onClose={() => {
+              setHasConnected(false)
+              setAddress('')
+            }} address={address} />
+          }
         </Box>
 
       </Toolbar>
