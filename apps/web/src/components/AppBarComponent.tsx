@@ -8,6 +8,8 @@ import { Box } from '@mui/material';
 
 function AppBarComponent() {
 
+  const handleOnConnectWallet = () => {}
+
   return (
     <AppBar position="static" sx={{ backgroundColor: 'black' }}>
 
@@ -27,7 +29,7 @@ function AppBarComponent() {
           </Box>
 
           {/* Button at the right end */}
-          <Button color="inherit">Connect Wallet</Button>
+          <Button color="inherit" onClick={() => {handleOnConnectWallet()}}>Connect Wallet</Button>
         </Box>
 
       </Toolbar>
