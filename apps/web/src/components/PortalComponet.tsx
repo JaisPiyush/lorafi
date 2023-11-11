@@ -4,47 +4,93 @@ import IconButton from '@mui/material/IconButton';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import Button from '@mui/material/Button';
 import { Stack, Typography } from '@mui/material';
-import CustomInputCompoent from './CustomInputCompoent';
+import CustomInputComponent from './CustomInputComponent';
 import { useState } from 'react';
 import CustomWalletDetailComponent from './CustomWalletDetailComponent';
-
+import { chainsRecord, Chains, tokensRecord, Tokens } from '../constant';
+import { useSDK } from '@metamask/sdk-react';
 
 function PortalComponet() {
 
-  const [walletConnected, setwalletConnected] = useState(false);
-  const [tokenSwapped, setTokenSwapped] = useState(false);
+
+  const getAvatar = (chain: Chains) => {
+    const chainData = chainsRecord[chain];
+    return chainData.url
+  }
+
+  const aDai = tokensRecord[Tokens.aDai];
+
+  const [fromChain, setFromChain] = useState<Chains>(Chains.Polygon);
+  const [toChain, setToChain] = useState<Chains>(Chains.Algorand)
+  const [amount, setAmount] = useState<string>('0')
+  
+  const { sdk, connected} = useSDK();
+  const [address, setAddress] = useState<string>(sdk?.activeProvider?.selectedAddress || '')
+
+
+  const handleOnConnectWallet = async () => {
+    try {
+      const accounts = (await sdk?.connect()) as string[];
+      // console.log(accounts)
+      setAddress(accounts[0]);
+    } catch(err) {
+      console.warn(`failed to connect..`, err);
+    }
+  }
+
+  const handleOnCutClick = () => {
+    if (fromChain === Chains.Polygon) {
+      sdk?.terminate()
+    } else {
+      setAddress('')
+    }
+  }
 
   return (
     <Paper elevation={5} sx={{ padding: '16px', textAlign: 'center', height: "40vh", margin: 5, width: "40%" }}>
       <Stack direction="row" sx={{ height: "100%", width: "100%", justifyContent: "center" }}>
         <Stack direction="column" sx={{ height: "100%", width: "100%", display: 'flex', justifyContent: "space-between" }}>
           <Stack direction="row" sx={{ display: 'flex', width: "100%", alignItems: 'center', justifyContent: 'space-between' }}>
-            <Avatar src="/path-to-avatar-1.jpg" alt="Avatar 1" sx={{ width: 60, height: 60 }} />
+            <Avatar src={getAvatar(fromChain)} alt="Avatar 1" sx={{ width: 60, height: 60 }} />
             <IconButton color="primary">
               <SwapHorizIcon onClick={() => {
-                setTokenSwapped(!tokenSwapped)
+                const _currentFromChain = fromChain;
+                setFromChain(toChain);
+                setToChain(_currentFromChain)
               }} />
             </IconButton>
-            <Avatar src="/path-to-avatar-2.jpg" alt="Bvatar 2" sx={{ width: 60, height: 60 }} />
+            <Avatar src={getAvatar(toChain)} alt="Avatar 2" sx={{ width: 60, height: 60 }} />
           </Stack>
           <Stack direction="row" sx={{ width: "100%", justifyContent: "center" }}>
-            <CustomInputCompoent />
+            <CustomInputComponent 
+              avatarSrc={aDai.url}
+              label={aDai.symbol}
+              placeholder='0'
+              onInput={setAmount}
+              value={amount}
+            />
           </Stack>
           {
-            walletConnected ? <Stack sx={{ width: "100%", overflow: "hidden", justifyContent: "center" }}>
-              <Typography>{!tokenSwapped ? "FROM" : "TO"}</Typography>
+            connected || fromChain === Chains.Algorand ? <Stack sx={{ width: "100%", overflow: "hidden", justifyContent: "center" }}>
+              <Typography>{fromChain === Chains.Polygon ? "FROM" : "TO"}</Typography>
             </Stack> : <></>
           }
-          {walletConnected ?
+          {connected || fromChain === Chains.Algorand ?
             <Stack sx={{ width: "100%", justifyContent: "center" }}>
-              <CustomWalletDetailComponent />
+              <CustomWalletDetailComponent 
+                onClose={() => {handleOnCutClick()}} 
+                address={address} 
+                disabled={fromChain === Chains.Polygon} 
+                onInput={setAddress} 
+                placeholder='Address'
+              />
             </Stack> : <>
             </>
           }
 
           <Stack sx={{}}>
-            <Button variant="contained" color="primary" onClick={() => {setwalletConnected(!walletConnected)}}>
-              {walletConnected ? "Port" : "Connect Wallet"}
+            <Button variant="contained" color="primary" onClick={() => {handleOnConnectWallet()}}>
+              {connected || fromChain === Chains.Algorand ? "Port" : "Connect Wallet"}
             </Button>
           </Stack>
         </Stack>

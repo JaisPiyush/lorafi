@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Button from '@mui/material/Button';
 import { Stack } from '@mui/material';
-import CustomInputCompoent from './CustomInputCompoent';
+import CustomInputComponent from './CustomInputComponent';
 
 function MintComponet() {
   return (
@@ -11,7 +11,7 @@ function MintComponet() {
       <Stack direction="row" sx={{ height: "100%", width: "100%", justifyContent: "center" }}>
         <Stack direction="column" sx={{ height: "100%", width: "100%", display: 'flex', justifyContent: "space-between" }}>
           <Stack direction="row" sx={{ display: 'flex', width: "100%", alignItems: 'center', justifyContent: 'space-between' }}>
-            <CustomInputCompoent/>
+            <CustomInputComponent/>
           </Stack>
           <Stack direction="row" sx={{ width: "100%", justifyContent: "center" }}>
             <IconButton color="primary">
@@ -19,10 +19,10 @@ function MintComponet() {
             </IconButton>
           </Stack>
           <Stack direction="row" sx={{ display: 'flex', width: "100%", alignItems: 'center', justifyContent: 'space-between' }}>
-            <CustomInputCompoent/>
+            <CustomInputComponent/>
           </Stack>
           <Stack direction="row" sx={{ display: 'flex', width: "100%", alignItems: 'center', justifyContent: 'space-between' }}>
-            <CustomInputCompoent/>
+            <CustomInputComponent/>
           </Stack>
           <Stack sx={{}}>
             <Button variant="contained" color="primary" >

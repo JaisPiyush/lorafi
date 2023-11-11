@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import InputBase from '@mui/material/InputBase';
@@ -9,29 +11,31 @@ interface CustomInputProps {
     avatarSrc: string;
     label: string;
     placeholder: string;
+    onInput: (inp: string) => void
+    value?: string
 }
 
-const CustomInput: React.FC<CustomInputProps> = ({ avatarSrc, label, placeholder }) => {
+const CustomInputComponent: React.FC<CustomInputProps> = ({ 
+    avatarSrc= '/path-to-avatar.jpg', 
+    label="Your Label", 
+    placeholder="Your Placeholder", 
+    value = '0',
+    onInput = (_) => {} }) => {
     return (
-        <Paper elevation={3} component="form"
-            sx={{ width: "100%", padding: 1 }}>
+        <Paper elevation={0} component="form" 
+            sx={{ width: "100%", padding: 1, border:1}}>
             <Stack direction="row">
                 <Avatar src={avatarSrc} alt="Avatar" style={{ marginRight: '1px' }} />
-                <Stack sx={{ width: 120, overflow: "hidden",justifyContent:"space-around" }}>
+                <Stack sx={{ width: 60, overflow: "hidden",justifyContent:"space-around" }}>
                     <Typography>{label}</Typography>
                 </Stack>
                 <Divider orientation="vertical" sx={{ height: 32, m: 0.5 }} />
-                <InputBase placeholder={placeholder} />
+                <InputBase value={value} placeholder={placeholder} onInput={(e) => {onInput((e.target as any).value)}} />
             </Stack>
 
         </Paper>
     );
 };
 
-const CustomInputCompoent = () => {
-    const avatarSrc = '/path-to-avatar.jpg'; // Replace with the actual path to your avatar image
 
-    return <CustomInput avatarSrc={avatarSrc} label="Your Label" placeholder="Your Placeholder" />;
-};
-
-export default CustomInputCompoent;
+export default CustomInputComponent;
