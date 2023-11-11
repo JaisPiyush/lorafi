@@ -1,6 +1,6 @@
 #pragma version 8
 intcblock 0 1 6
-bytecblock 0x 0x726573657276655f6964 0x636f72655f6170705f6964 0x73746f726167655f6163636f756e74
+bytecblock 0x 0x726573657276655f6964 0x61737365745f6964 0x636f72655f6170705f6964 0x73746f726167655f6163636f756e74
 txn NumAppArgs
 intc_0 // 0
 ==
@@ -61,14 +61,18 @@ itxn_field TypeEnum
 bytec_1 // "reserve_id"
 app_global_get
 itxn_field ApplicationID
-intc_0 // NoOp
-itxn_field OnCompletion
-pushbytes 0x6d696e745f706f727461626c655f746f6b656e // "mint_portable_token"
+frame_dig -1
+itxn_field Accounts
+pushbytes 0x2db83734 // "mint_portable_token(uint64,account)void"
 itxn_field ApplicationArgs
 frame_dig -2
+itob
 itxn_field ApplicationArgs
-frame_dig -1
+pushbytes 0x01 // 0x01
 itxn_field ApplicationArgs
+bytec_2 // "asset_id"
+app_global_get
+itxn_field Assets
 itxn_submit
 retsub
 
@@ -81,28 +85,28 @@ global CreatorAddress
 // unauthorized
 assert
 intc_0 // 0
-bytec_2 // "core_app_id"
+bytec_3 // "core_app_id"
 app_global_get_ex
 store 1
 store 0
 load 1
 !
 assert
-bytec_2 // "core_app_id"
+bytec_3 // "core_app_id"
 frame_dig -4
 app_global_put
 intc_0 // 0
-bytec_3 // "storage_account"
+bytec 4 // "storage_account"
 app_global_get_ex
 store 3
 store 2
 load 3
 !
 assert
-bytec_3 // "storage_account"
+bytec 4 // "storage_account"
 frame_dig -3
 app_global_put
-pushbytes 0x61737365745f6964 // "asset_id"
+bytec_2 // "asset_id"
 frame_dig -2
 app_global_put
 bytec_1 // "reserve_id"

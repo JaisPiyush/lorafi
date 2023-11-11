@@ -11,7 +11,7 @@ UNDERLYING_ASA_MANAGER_ADDR = pt.Global.current_application_address()
 UNDERLYING_ASA_RESERVE_ADDR = pt.Global.current_application_address()
 UNDERLYING_ASA_FREEZE_ADDR = pt.Global.current_application_address()
 UNDERLYING_ASA_CLAWBACK_ADDR = pt.Global.current_application_address()
-MINIMUM_LIQUIDITY = pt.Int(10**3)
+MINIMUM_LIQUIDITY = pt.Int(10)
 
 
 class PoolState:
@@ -20,10 +20,14 @@ class PoolState:
     has_configured = beaker.GlobalStateValue(
         stack_type=TealType.uint64, default=pt.Int(0)
     )
-    asset_1_id = beaker.GlobalStateValue(stack_type=TealType.uint64, default=pt.Int(0))
-    asset_2_id = beaker.GlobalStateValue(stack_type=TealType.uint64, default=pt.Int(0))
-    asset_1_reserve = beaker.GlobalStateValue(stack_type=TealType.uint64)
-    asset_2_reserve = beaker.GlobalStateValue(stack_type=TealType.uint64)
+    asset_1_reserve = beaker.GlobalStateValue(
+        stack_type=TealType.uint64, default=pt.Int(0)
+    )
+    asset_2_reserve = beaker.GlobalStateValue(
+        stack_type=TealType.uint64, default=pt.Int(0)
+    )
+    asset_1_id = beaker.GlobalStateValue(stack_type=TealType.uint64)
+    asset_2_id = beaker.GlobalStateValue(stack_type=TealType.uint64)
     lp_asset_id = beaker.GlobalStateValue(stack_type=TealType.uint64)
     k_constant = beaker.GlobalStateValue(stack_type=TealType.uint64, default=pt.Int(0))
     total_supply = beaker.GlobalStateValue(
@@ -35,13 +39,33 @@ app = beaker.Application("pool", state=PoolState())
 
 
 @app.external(authorize=beaker.Authorize.only_creator())
-def configure(name: abi.String, *, output: abi.Uint64) -> Expr:
+def configure(
+    name: abi.String, asset_1: abi.Asset, asset_2: abi.Asset, *, output: abi.Uint64
+) -> Expr:
     return Seq(
         Assert(
             app.state.has_configured.get() == pt.Int(0),
             comment="Pool has already been configured",
         ),
         app.state.name.set(name.get()),
+        pt.InnerTxnBuilder.Execute(
+            {
+                TxnField.type_enum: TxnType.AssetTransfer,
+                TxnField.xfer_asset: asset_1.asset_id(),
+                TxnField.asset_amount: pt.Int(0),
+                TxnField.sender: pt.Global.current_application_address(),
+                TxnField.asset_receiver: pt.Global.current_application_address(),
+            }
+        ),
+        pt.InnerTxnBuilder.Execute(
+            {
+                TxnField.type_enum: TxnType.AssetTransfer,
+                TxnField.xfer_asset: asset_2.asset_id(),
+                TxnField.asset_amount: pt.Int(0),
+                TxnField.sender: pt.Global.current_application_address(),
+                TxnField.asset_receiver: pt.Global.current_application_address(),
+            }
+        ),
         pt.InnerTxnBuilder.Execute(
             {
                 TxnField.type_enum: TxnType.AssetConfig,
@@ -57,6 +81,8 @@ def configure(name: abi.String, *, output: abi.Uint64) -> Expr:
             }
         ),
         app.state.lp_asset_id.set(pt.InnerTxn.created_asset_id()),
+        app.state.asset_1_id.set(asset_1.asset_id()),
+        app.state.asset_2_id.set(asset_2.asset_id()),
         app.state.has_configured.set(pt.Int(1)),
         output.set(app.state.lp_asset_id.get()),
     )
@@ -145,7 +171,7 @@ def deposit(
 ) -> Expr:
     liquidity = pt.ScratchVar(TealType.uint64)
     return Seq(
-        pre_condition_asset_check(pt.Gtxn[0].xfer_asset(), pt.Gtxn[1].xfer_asset()),
+        # pre_condition_asset_check(pt.Gtxn[0].xfer_asset(), pt.Gtxn[1].xfer_asset()),
         pt.If(app.state.total_supply.get() == pt.Int(0))
         .Then(
             liquidity.store(
@@ -156,7 +182,7 @@ def deposit(
                     )
                 )
             ),
-            _mint(pt.Global.zero_address(), MINIMUM_LIQUIDITY),
+            # _mint(pt.Global.zero_address(), MINIMUM_LIQUIDITY),
         )
         .Else(
             liquidity.store(
@@ -172,13 +198,13 @@ def deposit(
                 )
             )
         ),
-        _mint(to.address(), liquidity.load()),
         app.state.asset_1_reserve.set(
             app.state.asset_1_reserve.get() + pt.Gtxn[0].asset_amount()
         ),
         app.state.asset_2_reserve.set(
             app.state.asset_2_reserve.get() + pt.Gtxn[1].asset_amount()
         ),
+        _mint(to.address(), liquidity.load()),
         sync_k_constant(),
         pt.Approve(),
     )
@@ -225,7 +251,6 @@ def burn(to: abi.Account):
     )
 
 
-# TODO: function to swap
 @app.external
 def swap(to: abi.Account):
     asset_in = pt.ScratchVar(TealType.uint64)
@@ -258,11 +283,11 @@ def swap(to: abi.Account):
         ),
         amount_out.store(
             pt.Minus(
+                asset_out_reserve.load(),
                 pt.Div(
                     app.state.k_constant.get(),
                     pt.Add(asset_in_reserve.load(), pt.Gtxn[0].asset_amount()),
                 ),
-                asset_out_reserve.load(),
             )
         ),
         Assert(

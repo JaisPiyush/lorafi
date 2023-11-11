@@ -7,6 +7,14 @@
                 {
                     "type": "string",
                     "name": "name"
+                },
+                {
+                    "type": "asset",
+                    "name": "asset_1"
+                },
+                {
+                    "type": "asset",
+                    "name": "asset_2"
                 }
             ],
             "returns": {
@@ -24,14 +32,6 @@
             "name": "deposit",
             "args": [
                 {
-                    "type": "axfer",
-                    "name": "asset_1"
-                },
-                {
-                    "type": "axfer",
-                    "name": "asset_2"
-                },
-                {
                     "type": "account",
                     "name": "to"
                 }
@@ -44,10 +44,6 @@
             "name": "burn",
             "args": [
                 {
-                    "type": "axfer",
-                    "name": "asset"
-                },
-                {
                     "type": "account",
                     "name": "to"
                 }
@@ -59,10 +55,6 @@
         {
             "name": "swap",
             "args": [
-                {
-                    "type": "axfer",
-                    "name": "asset"
-                },
                 {
                     "type": "account",
                     "name": "to"

@@ -45,10 +45,6 @@
             "name": "mint",
             "args": [
                 {
-                    "type": "axfer",
-                    "name": "asset"
-                },
-                {
                     "type": "account",
                     "name": "to"
                 }
@@ -80,14 +76,6 @@
         {
             "name": "burn",
             "args": [
-                {
-                    "type": "axfer",
-                    "name": "_pt"
-                },
-                {
-                    "type": "axfer",
-                    "name": "_yt"
-                },
                 {
                     "type": "account",
                     "name": "to"

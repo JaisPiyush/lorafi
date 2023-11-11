@@ -1,6 +1,6 @@
 #pragma version 8
-intcblock 0 1 100000 4
-bytecblock 0x72617465 0x61737365745f6964 0x726174655f6f7261636c65 0x726573657276655f6964 0x70745f6964 0x79745f6964
+intcblock 0 1 100000
+bytecblock 0x72617465 0x61737365745f6964 0x70745f6964 0x79745f6964 0x726174655f6f7261636c65 0x726573657276655f6964
 txn NumAppArgs
 intc_0 // 0
 ==
@@ -14,7 +14,7 @@ pushbytes 0x73c4f59c // "configure(application,asset,account,asset,asset)void"
 ==
 bnz main_l10
 txna ApplicationArgs 0
-pushbytes 0x3f6fe62d // "mint(axfer,account)void"
+pushbytes 0x36563b1f // "mint(account)void"
 ==
 bnz main_l9
 txna ApplicationArgs 0
@@ -22,7 +22,7 @@ pushbytes 0x0e5983dd // "mint_on_command(uint64,uint64,account)void"
 ==
 bnz main_l8
 txna ApplicationArgs 0
-pushbytes 0xcfd02bbb // "burn(axfer,axfer,account)void"
+pushbytes 0x3c457a88 // "burn(account)void"
 ==
 bnz main_l7
 err
@@ -104,7 +104,7 @@ return
 israteoracle_0:
 proto 1 1
 frame_dig -1
-bytec_2 // "rate_oracle"
+bytec 4 // "rate_oracle"
 app_global_get
 ==
 retsub
@@ -125,7 +125,7 @@ retsub
 transfer_2:
 proto 4 0
 itxn_begin
-intc_3 // axfer
+pushint 4 // axfer
 itxn_field TypeEnum
 frame_dig -4
 itxn_field XferAsset
@@ -135,8 +135,6 @@ frame_dig -2
 itxn_field Sender
 frame_dig -1
 itxn_field AssetReceiver
-frame_dig -4
-itxn_field Assets
 itxn_submit
 retsub
 
@@ -148,7 +146,7 @@ global CreatorAddress
 ==
 // unauthorized
 assert
-bytec_3 // "reserve_id"
+bytec 5 // "reserve_id"
 frame_dig -5
 txnas Applications
 app_global_put
@@ -156,15 +154,15 @@ bytec_1 // "asset_id"
 frame_dig -4
 txnas Assets
 app_global_put
-bytec_2 // "rate_oracle"
+bytec 4 // "rate_oracle"
 frame_dig -3
 txnas Accounts
 app_global_put
-bytec 4 // "pt_id"
+bytec_2 // "pt_id"
 frame_dig -2
 txnas Assets
 app_global_put
-bytec 5 // "yt_id"
+bytec_3 // "yt_id"
 frame_dig -1
 txnas Assets
 app_global_put
@@ -194,35 +192,44 @@ proto 3 0
 itxn_begin
 pushint 6 // appl
 itxn_field TypeEnum
-bytec_3 // "reserve_id"
+bytec 5 // "reserve_id"
 app_global_get
 itxn_field ApplicationID
-intc_0 // NoOp
-itxn_field OnCompletion
-pushbytes 0x6d696e745f7969656c645f746f6b656e5f70616972 // "mint_yield_token_pair"
-itxn_field ApplicationArgs
-frame_dig -3
-itxn_field ApplicationArgs
-frame_dig -2
-itxn_field ApplicationArgs
 frame_dig -1
 txnas Accounts
+itxn_field Accounts
+pushbytes 0x06307dee // "mint_yield_token_pair(uint64,uint64,account)void"
 itxn_field ApplicationArgs
+frame_dig -3
+itob
+itxn_field ApplicationArgs
+frame_dig -2
+itob
+itxn_field ApplicationArgs
+pushbytes 0x01 // 0x01
+itxn_field ApplicationArgs
+bytec_1 // "asset_id"
+app_global_get
+itxn_field Assets
+bytec_2 // "pt_id"
+app_global_get
+itxn_field Assets
+bytec_3 // "yt_id"
+app_global_get
+itxn_field Assets
 itxn_submit
 retsub
 
 // mint
 mint_5:
-proto 2 0
-frame_dig -2
-gtxns XferAsset
+proto 1 0
+gtxn 0 XferAsset
 bytec_1 // "asset_id"
 app_global_get
 ==
 // asset not supported
 assert
-frame_dig -2
-gtxns AssetAmount
+gtxn 0 AssetAmount
 intc_2 // 100000
 bytec_0 // "rate"
 app_global_get
@@ -230,8 +237,7 @@ app_global_get
 intc_2 // 100000
 /
 *
-frame_dig -2
-gtxns AssetAmount
+gtxn 0 AssetAmount
 bytec_0 // "rate"
 app_global_get
 intc_2 // 100000
@@ -257,23 +263,20 @@ retsub
 
 // burn
 burn_7:
-proto 3 0
-frame_dig -3
-gtxns XferAsset
-bytec 4 // "pt_id"
+proto 1 0
+gtxn 0 XferAsset
+bytec_2 // "pt_id"
 app_global_get
 ==
 // principal token expected
 assert
-frame_dig -2
-gtxns XferAsset
-bytec 5 // "yt_id"
+gtxn 1 XferAsset
+bytec_3 // "yt_id"
 app_global_get
 ==
 // yield token expected
 assert
-frame_dig -3
-gtxns AssetAmount
+gtxn 0 AssetAmount
 intc_2 // 100000
 intc_2 // 100000
 bytec_0 // "rate"
@@ -282,11 +285,9 @@ app_global_get
 /
 *
 store 0
-frame_dig -2
-gtxns AssetAmount
+gtxn 1 AssetAmount
 load 0
-frame_dig -3
-gtxns AssetAmount
+gtxn 0 AssetAmount
 -
 >=
 // insufficient yield token
@@ -298,24 +299,19 @@ global CurrentApplicationAddress
 frame_dig -1
 txnas Accounts
 callsub transfer_2
-frame_dig -2
-gtxns AssetAmount
+gtxn 1 AssetAmount
 load 0
 -
-frame_dig -3
-gtxns AssetAmount
+gtxn 0 AssetAmount
 -
 intc_0 // 0
 >
 bz burn_7_l2
-frame_dig -2
-gtxns XferAsset
-frame_dig -2
-gtxns AssetAmount
+gtxn 1 XferAsset
+gtxn 1 AssetAmount
 load 0
 -
-frame_dig -3
-gtxns AssetAmount
+gtxn 0 AssetAmount
 -
 global CurrentApplicationAddress
 frame_dig -1
@@ -372,22 +368,11 @@ retsub
 mintcaster_10:
 proto 0 0
 intc_0 // 0
-dup
 txna ApplicationArgs 1
 intc_0 // 0
 getbyte
-frame_bury 1
-txn GroupIndex
-intc_1 // 1
--
 frame_bury 0
 frame_dig 0
-gtxns TypeEnum
-intc_3 // axfer
-==
-assert
-frame_dig 0
-frame_dig 1
 callsub mint_5
 retsub
 
@@ -416,31 +401,10 @@ retsub
 burncaster_12:
 proto 0 0
 intc_0 // 0
-dupn 2
 txna ApplicationArgs 1
 intc_0 // 0
 getbyte
-frame_bury 2
-txn GroupIndex
-pushint 2 // 2
--
 frame_bury 0
 frame_dig 0
-gtxns TypeEnum
-intc_3 // axfer
-==
-assert
-txn GroupIndex
-intc_1 // 1
--
-frame_bury 1
-frame_dig 1
-gtxns TypeEnum
-intc_3 // axfer
-==
-assert
-frame_dig 0
-frame_dig 1
-frame_dig 2
 callsub burn_7
 retsub
