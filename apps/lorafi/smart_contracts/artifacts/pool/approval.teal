@@ -1,43 +1,35 @@
 #pragma version 8
 intcblock 0 1 4
-bytecblock 0x61737365745f315f72657365727665 0x61737365745f325f72657365727665 0x746f74616c5f737570706c79 0x61737365745f315f6964 0x6c705f61737365745f6964 0x61737365745f325f6964 0x6861735f636f6e66696775726564 0x6b5f636f6e7374616e74 0x151f7c75
+bytecblock 0x61737365745f315f72657365727665 0x61737365745f325f72657365727665 0x61737365745f315f6964 0x746f74616c5f737570706c79 0x61737365745f325f6964 0x6c705f61737365745f6964 0x6b5f636f6e7374616e74 0x151f7c75 0x6861735f636f6e66696775726564
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l12
+bnz main_l14
 txna ApplicationArgs 0
 pushbytes 0x768fdc56 // "configure(string,asset,asset)uint64"
 ==
-bnz main_l11
+bnz main_l13
 txna ApplicationArgs 0
 pushbytes 0x9bd1046c // "get_lp_token_asset()uint64"
 ==
-bnz main_l10
+bnz main_l12
 txna ApplicationArgs 0
 pushbytes 0xf8c86197 // "deposit(account)void"
 ==
-bnz main_l9
+bnz main_l11
 txna ApplicationArgs 0
 pushbytes 0x3c457a88 // "burn(account)void"
 ==
-bnz main_l8
+bnz main_l10
+txna ApplicationArgs 0
+pushbytes 0xe919cb46 // "swap_quote(uint64,uint64)uint64"
+==
+bnz main_l9
 txna ApplicationArgs 0
 pushbytes 0xe161a2ec // "swap(account)void"
 ==
-bnz main_l7
+bnz main_l8
 err
-main_l7:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub swapcaster_13
-intc_1 // 1
-return
 main_l8:
 txn OnCompletion
 intc_0 // NoOp
@@ -47,7 +39,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub burncaster_12
+callsub swapcaster_15
 intc_1 // 1
 return
 main_l9:
@@ -59,7 +51,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub depositcaster_11
+callsub swapquotecaster_14
 intc_1 // 1
 return
 main_l10:
@@ -71,7 +63,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub getlptokenassetcaster_10
+callsub burncaster_13
 intc_1 // 1
 return
 main_l11:
@@ -83,16 +75,40 @@ intc_0 // 0
 !=
 &&
 assert
-callsub configurecaster_9
+callsub depositcaster_12
 intc_1 // 1
 return
 main_l12:
 txn OnCompletion
 intc_0 // NoOp
 ==
-bnz main_l14
-err
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub getlptokenassetcaster_11
+intc_1 // 1
+return
+main_l13:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub configurecaster_10
+intc_1 // 1
+return
 main_l14:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l16
+err
+main_l16:
 txn ApplicationID
 intc_0 // 0
 ==
@@ -109,7 +125,7 @@ global CreatorAddress
 ==
 // unauthorized
 assert
-bytec 6 // "has_configured"
+bytec 8 // "has_configured"
 app_global_get
 intc_0 // 0
 ==
@@ -168,21 +184,21 @@ itxn_field ConfigAssetFreeze
 global CurrentApplicationAddress
 itxn_field ConfigAssetClawback
 itxn_submit
-bytec 4 // "lp_asset_id"
+bytec 5 // "lp_asset_id"
 itxn CreatedAssetID
 app_global_put
-bytec_3 // "asset_1_id"
+bytec_2 // "asset_1_id"
 frame_dig -2
 txnas Assets
 app_global_put
-bytec 5 // "asset_2_id"
+bytec 4 // "asset_2_id"
 frame_dig -1
 txnas Assets
 app_global_put
-bytec 6 // "has_configured"
+bytec 8 // "has_configured"
 intc_1 // 1
 app_global_put
-bytec 4 // "lp_asset_id"
+bytec 5 // "lp_asset_id"
 app_global_get
 frame_bury 0
 retsub
@@ -191,7 +207,7 @@ retsub
 getlptokenasset_1:
 proto 0 1
 intc_0 // 0
-bytec 4 // "lp_asset_id"
+bytec 5 // "lp_asset_id"
 app_global_get
 frame_bury 0
 retsub
@@ -199,7 +215,7 @@ retsub
 // sync_k_constant
 synckconstant_2:
 proto 0 0
-bytec 7 // "k_constant"
+bytec 6 // "k_constant"
 bytec_0 // "asset_1_reserve"
 app_global_get
 bytec_1 // "asset_2_reserve"
@@ -214,7 +230,7 @@ proto 2 0
 itxn_begin
 intc_2 // axfer
 itxn_field TypeEnum
-bytec 4 // "lp_asset_id"
+bytec 5 // "lp_asset_id"
 app_global_get
 itxn_field XferAsset
 global CurrentApplicationAddress
@@ -224,8 +240,8 @@ itxn_field AssetReceiver
 frame_dig -1
 itxn_field AssetAmount
 itxn_submit
-bytec_2 // "total_supply"
-bytec_2 // "total_supply"
+bytec_3 // "total_supply"
+bytec_3 // "total_supply"
 app_global_get
 frame_dig -1
 +
@@ -265,20 +281,20 @@ retsub
 // deposit
 deposit_6:
 proto 1 0
-bytec_2 // "total_supply"
+bytec_3 // "total_supply"
 app_global_get
 intc_0 // 0
 ==
 bnz deposit_6_l2
 gtxn 0 AssetAmount
-bytec_2 // "total_supply"
+bytec_3 // "total_supply"
 app_global_get
 *
 bytec_0 // "asset_1_reserve"
 app_global_get
 /
 gtxn 1 AssetAmount
-bytec_2 // "total_supply"
+bytec_3 // "total_supply"
 app_global_get
 *
 bytec_1 // "asset_2_reserve"
@@ -320,7 +336,7 @@ return
 burn_7:
 proto 1 0
 gtxn 0 XferAsset
-bytec 4 // "lp_asset_id"
+bytec 5 // "lp_asset_id"
 app_global_get
 ==
 // Not Pool LP Token
@@ -329,7 +345,7 @@ gtxn 0 AssetAmount
 bytec_0 // "asset_1_reserve"
 app_global_get
 *
-bytec_2 // "total_supply"
+bytec_3 // "total_supply"
 app_global_get
 /
 store 1
@@ -337,7 +353,7 @@ gtxn 0 AssetAmount
 bytec_1 // "asset_2_reserve"
 app_global_get
 *
-bytec_2 // "total_supply"
+bytec_3 // "total_supply"
 app_global_get
 /
 store 2
@@ -362,20 +378,20 @@ app_global_get
 load 2
 -
 app_global_put
-bytec_3 // "asset_1_id"
+bytec_2 // "asset_1_id"
 app_global_get
 frame_dig -1
 txnas Accounts
 load 1
 callsub transfer_4
-bytec 5 // "asset_2_id"
+bytec 4 // "asset_2_id"
 app_global_get
 frame_dig -1
 txnas Accounts
 load 2
 callsub transfer_4
-bytec_2 // "total_supply"
-bytec_2 // "total_supply"
+bytec_3 // "total_supply"
+bytec_3 // "total_supply"
 app_global_get
 gtxn 0 AssetAmount
 -
@@ -384,43 +400,58 @@ callsub synckconstant_2
 intc_1 // 1
 return
 
-// swap
-swap_8:
-proto 1 0
-gtxn 0 XferAsset
-bytec_3 // "asset_1_id"
+// swap_quote
+swapquote_8:
+proto 2 1
+intc_0 // 0
+frame_dig -1
+bytec_2 // "asset_1_id"
 app_global_get
 ==
-gtxn 0 XferAsset
-bytec 5 // "asset_2_id"
+frame_dig -1
+bytec 4 // "asset_2_id"
 app_global_get
 ==
 ||
 // asset not recognized
 assert
-gtxn 0 XferAsset
-bytec_3 // "asset_1_id"
+frame_dig -1
+bytec_2 // "asset_1_id"
 app_global_get
 ==
-bnz swap_8_l5
-bytec 5 // "asset_2_id"
+bnz swapquote_8_l2
+bytec 4 // "asset_2_id"
 app_global_get
 store 3
 bytec_1 // "asset_2_reserve"
 app_global_get
 store 4
-bytec_3 // "asset_1_id"
+bytec_2 // "asset_1_id"
 app_global_get
 store 6
 bytec_0 // "asset_1_reserve"
 app_global_get
 store 5
-swap_8_l2:
+b swapquote_8_l3
+swapquote_8_l2:
+bytec_2 // "asset_1_id"
+app_global_get
+store 3
+bytec_0 // "asset_1_reserve"
+app_global_get
+store 4
+bytec 4 // "asset_2_id"
+app_global_get
+store 6
+bytec_1 // "asset_2_reserve"
+app_global_get
+store 5
+swapquote_8_l3:
 load 5
-bytec 7 // "k_constant"
+bytec 6 // "k_constant"
 app_global_get
 load 4
-gtxn 0 AssetAmount
+frame_dig -2
 +
 /
 -
@@ -430,11 +461,61 @@ load 5
 <
 // insufficient liquidity
 assert
+load 7
+frame_bury 0
+retsub
+
+// swap
+swap_9:
+proto 1 0
 gtxn 0 XferAsset
-bytec_3 // "asset_1_id"
+bytec_2 // "asset_1_id"
 app_global_get
 ==
-bnz swap_8_l4
+gtxn 0 XferAsset
+bytec 4 // "asset_2_id"
+app_global_get
+==
+||
+// asset not recognized
+assert
+gtxn 0 XferAsset
+bytec_2 // "asset_1_id"
+app_global_get
+==
+bnz swap_9_l5
+bytec 4 // "asset_2_id"
+app_global_get
+store 8
+bytec_1 // "asset_2_reserve"
+app_global_get
+store 9
+bytec_2 // "asset_1_id"
+app_global_get
+store 11
+bytec_0 // "asset_1_reserve"
+app_global_get
+store 10
+swap_9_l2:
+load 10
+bytec 6 // "k_constant"
+app_global_get
+load 9
+gtxn 0 AssetAmount
++
+/
+-
+store 12
+load 12
+load 10
+<
+// insufficient liquidity
+assert
+gtxn 0 XferAsset
+bytec_2 // "asset_1_id"
+app_global_get
+==
+bnz swap_9_l4
 bytec_1 // "asset_2_reserve"
 bytec_1 // "asset_2_reserve"
 app_global_get
@@ -444,11 +525,11 @@ app_global_put
 bytec_0 // "asset_1_reserve"
 bytec_0 // "asset_1_reserve"
 app_global_get
-load 7
+load 12
 -
 app_global_put
-b swap_8_l6
-swap_8_l4:
+b swap_9_l6
+swap_9_l4:
 bytec_0 // "asset_1_reserve"
 bytec_0 // "asset_1_reserve"
 app_global_get
@@ -458,34 +539,34 @@ app_global_put
 bytec_1 // "asset_2_reserve"
 bytec_1 // "asset_2_reserve"
 app_global_get
-load 7
+load 12
 -
 app_global_put
-b swap_8_l6
-swap_8_l5:
-bytec_3 // "asset_1_id"
+b swap_9_l6
+swap_9_l5:
+bytec_2 // "asset_1_id"
 app_global_get
-store 3
+store 8
 bytec_0 // "asset_1_reserve"
 app_global_get
-store 4
-bytec 5 // "asset_2_id"
+store 9
+bytec 4 // "asset_2_id"
 app_global_get
-store 6
+store 11
 bytec_1 // "asset_2_reserve"
 app_global_get
-store 5
-b swap_8_l2
-swap_8_l6:
-load 6
+store 10
+b swap_9_l2
+swap_9_l6:
+load 11
 frame_dig -1
 txnas Accounts
-load 7
+load 12
 callsub transfer_4
 retsub
 
 // configure_caster
-configurecaster_9:
+configurecaster_10:
 proto 0 0
 intc_0 // 0
 pushbytes 0x // ""
@@ -506,7 +587,7 @@ frame_dig 2
 frame_dig 3
 callsub configure_0
 frame_bury 0
-bytec 8 // 0x151f7c75
+bytec 7 // 0x151f7c75
 frame_dig 0
 itob
 concat
@@ -514,12 +595,12 @@ log
 retsub
 
 // get_lp_token_asset_caster
-getlptokenassetcaster_10:
+getlptokenassetcaster_11:
 proto 0 0
 intc_0 // 0
 callsub getlptokenasset_1
 frame_bury 0
-bytec 8 // 0x151f7c75
+bytec 7 // 0x151f7c75
 frame_dig 0
 itob
 concat
@@ -527,7 +608,7 @@ log
 retsub
 
 // deposit_caster
-depositcaster_11:
+depositcaster_12:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
@@ -539,7 +620,7 @@ callsub deposit_6
 retsub
 
 // burn_caster
-burncaster_12:
+burncaster_13:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
@@ -550,8 +631,30 @@ frame_dig 0
 callsub burn_7
 retsub
 
+// swap_quote_caster
+swapquotecaster_14:
+proto 0 0
+intc_0 // 0
+dupn 2
+txna ApplicationArgs 1
+btoi
+frame_bury 1
+txna ApplicationArgs 2
+btoi
+frame_bury 2
+frame_dig 1
+frame_dig 2
+callsub swapquote_8
+frame_bury 0
+bytec 7 // 0x151f7c75
+frame_dig 0
+itob
+concat
+log
+retsub
+
 // swap_caster
-swapcaster_13:
+swapcaster_15:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
@@ -559,5 +662,5 @@ intc_0 // 0
 getbyte
 frame_bury 0
 frame_dig 0
-callsub swap_8
+callsub swap_9
 retsub

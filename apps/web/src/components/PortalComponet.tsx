@@ -10,6 +10,9 @@ import CustomWalletDetailComponent from './CustomWalletDetailComponent';
 import { chainsRecord, Chains, tokensRecord, Tokens } from '../constant';
 import { useSDK } from '@metamask/sdk-react';
 
+//TODO(fix): Implement MyAlgoAccount Provider
+//TODO(feat): Add functionality to PORT button 
+
 function PortalComponet() {
 
 

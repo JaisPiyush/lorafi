@@ -5,9 +5,8 @@ import { useState } from 'react'
 import { Stack } from '@mui/material';
 
 function App() {
-  
 
-  const [componentState, setComponentState] = useState<String>("portal");
+  const [componentState, setComponentState] = useState<string>("mint");
 
   const renderSwitch = (state: String) => {
     switch (state) {

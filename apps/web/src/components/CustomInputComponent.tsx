@@ -10,9 +10,10 @@ import { Stack } from '@mui/material';
 interface CustomInputProps {
     avatarSrc: string;
     label: string;
-    placeholder: string;
-    onInput: (inp: string) => void
-    value?: string
+    placeholder?: string;
+    onInput?: (inp: string) => void
+    value?: string;
+    disabled?: boolean
 }
 
 const CustomInputComponent: React.FC<CustomInputProps> = ({ 
@@ -20,17 +21,23 @@ const CustomInputComponent: React.FC<CustomInputProps> = ({
     label="Your Label", 
     placeholder="Your Placeholder", 
     value = '0',
+    disabled = false,
     onInput = (_) => {} }) => {
     return (
         <Paper elevation={0} component="form" 
             sx={{ width: "100%", padding: 1, border:1}}>
             <Stack direction="row">
                 <Avatar src={avatarSrc} alt="Avatar" style={{ marginRight: '1px' }} />
-                <Stack sx={{ width: 60, overflow: "hidden",justifyContent:"space-around" }}>
+                <Stack sx={{ width: 80, overflow: "hidden",justifyContent:"space-around" }}>
                     <Typography>{label}</Typography>
                 </Stack>
                 <Divider orientation="vertical" sx={{ height: 32, m: 0.5 }} />
-                <InputBase value={value} placeholder={placeholder} onInput={(e) => {onInput((e.target as any).value)}} />
+                <InputBase 
+                    disabled={disabled} 
+                    value={value} 
+                    placeholder={placeholder} 
+                    onInput={(e) => {onInput((e.target as any).value)}} 
+                />
             </Stack>
 
         </Paper>

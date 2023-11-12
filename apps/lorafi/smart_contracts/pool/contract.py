@@ -251,6 +251,55 @@ def burn(to: abi.Account):
     )
 
 
+@app.external(read_only=True)
+def swap_quote(
+    asset_amount: abi.Uint64, asset_id: abi.Uint64, *, output: abi.Uint64
+) -> Expr:
+    asset_in = pt.ScratchVar(TealType.uint64)
+    asset_in_reserve = pt.ScratchVar(TealType.uint64)
+    asset_out_reserve = pt.ScratchVar(TealType.uint64)
+    asset_out = pt.ScratchVar(TealType.uint64)
+    amount_out = pt.ScratchVar(TealType.uint64)
+    return Seq(
+        Assert(
+            pt.Or(
+                asset_id.get() == app.state.asset_1_id.get(),
+                asset_id.get() == app.state.asset_2_id.get(),
+            ),
+            comment="asset not recognized",
+        ),
+        pt.If(
+            asset_id.get() == app.state.asset_1_id.get(),
+        )
+        .Then(
+            Seq(asset_in.store(app.state.asset_1_id.get())),
+            asset_in_reserve.store(app.state.asset_1_reserve.get()),
+            asset_out.store(app.state.asset_2_id.get()),
+            asset_out_reserve.store(app.state.asset_2_reserve.get()),
+        )
+        .Else(
+            Seq(asset_in.store(app.state.asset_2_id.get())),
+            asset_in_reserve.store(app.state.asset_2_reserve.get()),
+            asset_out.store(app.state.asset_1_id.get()),
+            asset_out_reserve.store(app.state.asset_1_reserve.get()),
+        ),
+        amount_out.store(
+            pt.Minus(
+                asset_out_reserve.load(),
+                pt.Div(
+                    app.state.k_constant.get(),
+                    pt.Add(asset_in_reserve.load(), asset_amount.get()),
+                ),
+            )
+        ),
+        Assert(
+            amount_out.load() < asset_out_reserve.load(),
+            comment="insufficient liquidity",
+        ),
+        output.set(amount_out.load()),
+    )
+
+
 @app.external
 def swap(to: abi.Account):
     asset_in = pt.ScratchVar(TealType.uint64)

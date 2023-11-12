@@ -1,5 +1,5 @@
 {
-  "name": "smart_contracts",
+  "name": "lorafi",
   "version": "1.0.0",
   "description": "Smart contract deployer",
   "main": "index.ts",

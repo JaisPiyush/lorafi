@@ -53,6 +53,22 @@
             }
         },
         {
+            "name": "swap_quote",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "asset_amount"
+                },
+                {
+                    "type": "uint64",
+                    "name": "asset_id"
+                }
+            ],
+            "returns": {
+                "type": "uint64"
+            }
+        },
+        {
             "name": "swap",
             "args": [
                 {
