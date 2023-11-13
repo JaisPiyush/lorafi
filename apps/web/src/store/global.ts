@@ -2,11 +2,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 
 interface GlobalState {
-    tab: 'swap' | 'portal' | 'mint'
+    tab: 'swap' | 'portal' | 'mint',
+    alertMsg: string | null;
+    alertType: 'error' | 'success' | 'info'
 }
 
 const initialState: GlobalState = {
-    tab: 'portal'
+    tab: 'swap',
+    alertMsg: null,
+    alertType: 'error'
 }
 
 export const globalSlice = createSlice({
@@ -15,7 +19,12 @@ export const globalSlice = createSlice({
     reducers: {
         setTab: (state, action: PayloadAction<GlobalState['tab']>) => {
             state.tab = action.payload;
-        }
+        },
+        setAlert: (state, 
+            action: PayloadAction<{msg: string | null, type?: GlobalState['alertType']}>) => {
+                state.alertMsg = action.payload.msg;
+                state.alertType = action.payload.type || state.alertType
+            }
     }
 })
  

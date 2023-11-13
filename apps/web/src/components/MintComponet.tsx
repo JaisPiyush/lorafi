@@ -5,13 +5,21 @@ import Button from '@mui/material/Button';
 import { Stack } from '@mui/material';
 import CustomInputComponent from './CustomInputComponent';
 import { Tokens, tokensRecord } from '../constant';
-import { getGlobalStateOfPool } from '../contract_calls/pool';
+import { useState } from 'react';
+// import { getGlobalStateOfPool } from '../contract_calls/pool';
 
 function MintComponet() {
   const aDai = tokensRecord[Tokens.aDai];
   const ptADai = tokensRecord[Tokens.PT_aDai];
   const ytADai = tokensRecord[Tokens.YT_aDai];
-  getGlobalStateOfPool(477943147)
+  const [amountIn, setAmountIn] = useState<string>('0');
+  const [ptAmountOut, setPtAmountOut] = useState<string>('0');
+  const [ytAmountOut, setYtAmountOut] = useState<string>('0');
+
+  const handleOnAmountInput = (s: string) => {
+    setAmountIn(s)
+  }
+
   return (
     <Paper elevation={5} sx={{ padding: '16px', textAlign: 'center', height: "40vh", margin: 5, width: "40%" }}>
       <Stack direction="row" sx={{ height: "100%", width: "100%", justifyContent: "center" }}>
@@ -20,6 +28,9 @@ function MintComponet() {
             <CustomInputComponent
               avatarSrc={aDai.url}
               label={aDai.symbol}
+              value={amountIn}
+              onInput={handleOnAmountInput}
+              placeholder='Enter amount'
             />
           </Stack>
           <Stack direction="row" sx={{ width: "100%", justifyContent: "center" }}>
@@ -32,6 +43,7 @@ function MintComponet() {
               avatarSrc={ptADai.url}
               label={ptADai.symbol}
               disabled={true}
+              value={ptAmountOut}
             />
           </Stack>
           <Stack direction="row" sx={{ display: 'flex', width: "100%", alignItems: 'center', justifyContent: 'space-between' }}>
@@ -39,6 +51,7 @@ function MintComponet() {
               avatarSrc={ytADai.url}
               label={ytADai.symbol}
               disabled={true}
+              value={ytAmountOut}
             />
           </Stack>
           <Stack sx={{}}>

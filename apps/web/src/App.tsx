@@ -2,12 +2,20 @@
 import './App.css'
 import {AppBarComponent, AppLandingCompoent, PortalComponet, MintComponet, SwapComponent} from './components'
 
-import { Stack } from '@mui/material';
-import { useAppSelector } from './hooks/store';
+import { Alert, Snackbar, Stack } from '@mui/material';
+import { useAppDispatch, useAppSelector } from './hooks/store';
+import { globalActions } from './store/global';
 
 function App() {
 
-  const [tab] = useAppSelector(state => [state.global.tab])
+  const [tab, alertMsg, alertType] = useAppSelector(state => [state.global.tab, 
+    state.global.alertMsg, state.global.alertType])
+  
+  const dispatch = useAppDispatch()
+
+  const handleOnCloseAlert = () => {
+    dispatch(globalActions.setAlert({msg: null}));
+  }
 
 
   const renderSwitch = (state: 'swap' | 'portal' | 'mint') => {
@@ -41,6 +49,11 @@ function App() {
       <Stack direction="row" sx={{width:"100%", height: "100%", justifyContent: "center"}}>
         {renderSwitch(tab)}
       </Stack>
+      <Snackbar open={alertMsg !== null} onClose={() => {
+        handleOnCloseAlert()
+      }} >
+        <Alert severity={alertType} >{alertMsg}</Alert>
+      </Snackbar>
     </>
   )
 }

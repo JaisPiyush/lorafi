@@ -13,10 +13,12 @@ interface CustomInputProps {
     placeholder?: string;
     onInput?: (inp: string) => void
     value?: string;
-    disabled?: boolean
+    disabled?: boolean;
+    type?: string
 }
 
-const CustomInputComponent: React.FC<CustomInputProps> = ({ 
+const CustomInputComponent: React.FC<CustomInputProps> = ({
+    type, 
     avatarSrc= '/path-to-avatar.jpg', 
     label="Your Label", 
     placeholder="Your Placeholder", 
@@ -36,6 +38,7 @@ const CustomInputComponent: React.FC<CustomInputProps> = ({
                     disabled={disabled} 
                     value={value} 
                     placeholder={placeholder} 
+                    type={type}
                     onInput={(e) => {onInput((e.target as any).value)}} 
                 />
             </Stack>
