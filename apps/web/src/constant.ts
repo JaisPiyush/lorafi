@@ -18,8 +18,8 @@ export enum Chains {
 export enum Tokens {
     aDai = 'aDAI',
     USDT = 'USDT',
-    PT_aDai = 'PT_aDAI',
-    YT_aDai = 'YT_aDAI'
+    PT_aDai = 'PT-aDAI',
+    YT_aDai = 'YT-aDAI'
 }
 
 export const algorandAppId = {
@@ -82,4 +82,11 @@ export const tokensRecord: Record<string, Token> = {
 export const pools = [
     // PT-aDAI/YT-aDAI
     478989570
-]
+] as const
+
+
+export const poolAssets: Record<string, {token: Tokens, pool: number }[]> = {
+    [Tokens.PT_aDai]: [
+        {token: Tokens.YT_aDai, pool: pools[0]}
+    ]
+}

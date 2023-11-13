@@ -1,21 +1,27 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
-import ImageIcon from '@mui/icons-material/Image';
+
 import { SelectChangeEvent } from '@mui/material/Select';
+import { tokensRecord } from '../constant';
+
 
 interface CustomSelectProps {
-  label: string;
   options: { value: string; label: string; image: React.ReactNode }[];
+  onChange?: (value: string) => void;
+  value?: string
 }
 
-const CustomSelect: React.FC<CustomSelectProps> = ({ label, options }) => {
-  const [selectedValue, setSelectedValue] = useState('');
+export const CustomSelect: React.FC<CustomSelectProps> = ({options, onChange = (_) => {}, value = '' }) => {
+  const [selectedValue, setSelectedValue] = useState<string>(value || '');
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSelectedValue(event.target.value);
+    onChange(event.target.value)
   };
 
   return (
@@ -23,8 +29,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ label, options }) => {
       <FormControl fullWidth>
         {/* <InputLabel>{label}</InputLabel> */}
         <Select value={selectedValue} onChange={handleChange} sx={{ width: 200 }}>
-          {options.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+          {options.map((option, index) => (
+            <MenuItem divider key={index} value={option.value as any}>
               {option.image}
               {option.label}
             </MenuItem>
@@ -35,16 +41,18 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ label, options }) => {
   );
 };
 
-const CustomSelectCompoent = () => {
-  const imageComponent = <ImageIcon fontSize="small" />;
+const CustomSelectComponent = ({onChange, value}: {onChange?: (value: string) => void, value?: string}) => {
+  // const imageComponent = <ImageIcon fontSize="small" />;
 
-  const options = [
-    { value: 'option1', label: 'Option 1', image: imageComponent },
-    { value: 'option2', label: 'Option 2', image: imageComponent },
-    // Add more options as needed
-  ];
+  const options = Object.values(tokensRecord).map((token) => {
+    return {
+      value: token.assetId.toString(),
+      label: token.symbol,
+      image: <img src={token.url} height={'20px'} />
+    }
+  })
 
-  return <CustomSelect label="Select an option" options={options} />;
+  return <CustomSelect  options={options} onChange={onChange} value={value} />;
 };
 
-export default CustomSelectCompoent;
+export default CustomSelectComponent;
