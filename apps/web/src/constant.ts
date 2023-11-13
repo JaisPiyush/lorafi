@@ -81,5 +81,5 @@ export const tokensRecord: Record<string, Token> = {
 
 export const pools = [
     // PT-aDAI/YT-aDAI
-    477943147
+    478989570
 ]

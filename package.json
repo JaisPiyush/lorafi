@@ -23,6 +23,8 @@
   ],
   "dependencies": {
     "@algorandfoundation/algokit-utils": "^4.1.0",
-    "crypto-js": "^4.2.0"
+    "@reduxjs/toolkit": "^1.9.7",
+    "crypto-js": "^4.2.0",
+    "react-redux": "^8.1.3"
   }
 }

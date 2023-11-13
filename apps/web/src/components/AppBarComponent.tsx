@@ -5,8 +5,12 @@ import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
 
 import { useMyAlgoConnect } from '../hooks/useMyAlgoConnect';
-import { useState } from 'react';
+
 import CustomWalletDetailComponent from './CustomWalletDetailComponent';
+import { useAppSelector } from '../hooks/store';
+import { useDispatch } from 'react-redux';
+import { accountActions } from '../store/account';
+import { globalActions } from '../store/global';
 
 
 
@@ -14,18 +18,21 @@ import CustomWalletDetailComponent from './CustomWalletDetailComponent';
 
 function AppBarComponent() {
   const myAlgoConnect = useMyAlgoConnect();
-  const [hasConnected, setHasConnected] = useState<boolean>(false)
-  const [address, setAddress] = useState<string>('')
+  const [address, isConnected, tab] = useAppSelector(state => [state.account.address, state.account.isConnected, state.global.tab]);
+  const dispatch = useDispatch()
+
+  const handleOnTabClick = (tab: 'portal' | 'swap' | 'mint') => {
+    dispatch(globalActions.setTab(tab));
+  }
 
   // Check if wallet is already connected and trigger wallet connection upon no connected wallet
   // TODO(store): Account store to save connected wallet data and connection status
   const handleOnConnectWallet = async () => {
-    if (hasConnected) return;
+    if (isConnected) return;
     const accountsSharedByUser = await myAlgoConnect.connect({
       shouldSelectOneAccount: true
     });
-    setHasConnected(true)
-    setAddress(accountsSharedByUser[0].address)
+    dispatch(accountActions.setAddress(accountsSharedByUser[0].address))
 
   }
 
@@ -42,18 +49,17 @@ function AppBarComponent() {
 
           {/* Three buttons in the center */}
           <Box sx={{ display: 'flex', justifyContent: 'center', flex: 1 }}>
-            <Button color="inherit">Portal</Button>
-            <Button color="inherit">Swap</Button>
-            <Button color="inherit">Mint</Button>
+            <Button onClick={() => {handleOnTabClick('portal')}} color={tab === 'portal' ? 'primary': 'inherit'}>Portal</Button>
+            <Button onClick={() => {handleOnTabClick('swap')}} color={tab === 'swap' ? 'primary': 'inherit'}>Swap</Button>
+            <Button onClick={() => {handleOnTabClick('mint')}} color={tab === 'mint' ? 'primary': 'inherit'}>Mint</Button>
           </Box>
 
           {/* Button at the right end */}
           {
-            (!hasConnected) ? <Button color="inherit" onClick={() => {handleOnConnectWallet()}}>Connect Wallet</Button>:
+            (!isConnected) ? <Button color="inherit" onClick={() => {handleOnConnectWallet()}}>Connect Wallet</Button>:
             <CustomWalletDetailComponent onClose={() => {
-              setHasConnected(false)
-              setAddress('')
-            }} address={address} />
+              dispatch(accountActions.setAddress(undefined))
+            }} address={address || ''} />
           }
         </Box>
 

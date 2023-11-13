@@ -1,14 +1,16 @@
 
 import './App.css'
 import {AppBarComponent, AppLandingCompoent, PortalComponet, MintComponet, SwapComponent} from './components'
-import { useState } from 'react'
+
 import { Stack } from '@mui/material';
+import { useAppSelector } from './hooks/store';
 
 function App() {
 
-  const [componentState, setComponentState] = useState<string>("mint");
+  const [tab] = useAppSelector(state => [state.global.tab])
 
-  const renderSwitch = (state: String) => {
+
+  const renderSwitch = (state: 'swap' | 'portal' | 'mint') => {
     switch (state) {
       case "portal": return (
         <>
@@ -37,7 +39,7 @@ function App() {
     <>
       <AppBarComponent/>
       <Stack direction="row" sx={{width:"100%", height: "100%", justifyContent: "center"}}>
-        {renderSwitch(componentState)}
+        {renderSwitch(tab)}
       </Stack>
     </>
   )
