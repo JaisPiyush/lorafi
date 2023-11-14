@@ -1,7 +1,5 @@
 
 import { getAlgodClient, mapStateValue } from "../utils";
-import algosdk, { TransactionSigner } from 'algosdk';
-import MyAlgoConnect from '@randlabs/myalgo-connect';
 
 
 
