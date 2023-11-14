@@ -6,6 +6,11 @@ import { Stack } from '@mui/material';
 import CustomInputComponent from './CustomInputComponent';
 import { Tokens, tokensRecord } from '../constant';
 import { useState } from 'react';
+import { useMyAlgoConnect } from '../hooks/useMyAlgoConnect';
+import { mintADaiTokens } from '../contract_calls/reserve';
+import { getAlgodClient } from '../utils';
+import algosdk from 'algosdk';
+import { getLPTokenAssetId } from '../contract_calls/pool';
 // import { getGlobalStateOfPool } from '../contract_calls/pool';
 
 function MintComponet() {
@@ -15,6 +20,25 @@ function MintComponet() {
   const [amountIn, setAmountIn] = useState<string>('0');
   const [ptAmountOut, setPtAmountOut] = useState<string>('0');
   const [ytAmountOut, setYtAmountOut] = useState<string>('0');
+
+  function base64ToBytes(base64) {
+    const binString = atob(base64);
+    return Uint8Array.from(binString, (m) => m.codePointAt(0));
+  }
+
+  const myAlgoConnect = useMyAlgoConnect();
+  // const algoClient = getAlgodClient()
+  
+  const mint = async () => {
+    // const addressInfo = await myAlgoConnect.connect();
+    const address =  'QNVC66OH5POT3Z4OJV3OTHKLUJ4P3DWONAPFRPSN4VMLIH44UW626U4ZQE' //addressInfo[0].address;
+    await mintADaiTokens(
+      address,
+      myAlgoConnect,
+      parseInt(amountIn)
+    )
+  
+  }
 
   const handleOnAmountInput = (s: string) => {
     setAmountIn(s)
@@ -55,7 +79,7 @@ function MintComponet() {
             />
           </Stack>
           <Stack sx={{}}>
-            <Button variant="contained" color="primary" >
+            <Button onClick={() => {mint()}} variant="contained" color="primary" >
               Mint
             </Button>
           </Stack>

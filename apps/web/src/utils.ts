@@ -1,6 +1,7 @@
-import algosdk from "algosdk";
+import algosdk, { TransactionSigner } from "algosdk";
 import Base64 from 'crypto-js/enc-base64';
 import * as CryptoJS from 'crypto-js'
+import MyAlgoConnect from "@randlabs/myalgo-connect";
 
 
 export function getAlgodClient() {
@@ -33,4 +34,15 @@ export function mapStateValue(
 
         return data
 
+}
+
+
+export const getSigner = (myAlgoConnect: MyAlgoConnect): TransactionSigner => {
+    return async (txnGroup, indexesToSign) => {
+        const signed: Uint8Array[] = [];
+        for (const index of indexesToSign) {
+            signed.push((await myAlgoConnect.signTransaction(txnGroup[index].toByte())).blob)
+        }
+        return signed
+    }
 }
