@@ -1,0 +1,42 @@
+{
+    "name": "portal",
+    "methods": [
+        {
+            "name": "configure",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "app_id"
+                },
+                {
+                    "type": "address",
+                    "name": "storage_acc"
+                },
+                {
+                    "type": "uint64",
+                    "name": "asset_id"
+                },
+                {
+                    "type": "uint64",
+                    "name": "reserve_id"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "portal_transfer",
+            "args": [
+                {
+                    "type": "byte[]",
+                    "name": "vaa"
+                }
+            ],
+            "returns": {
+                "type": "byte[]"
+            }
+        }
+    ],
+    "networks": {}
+}

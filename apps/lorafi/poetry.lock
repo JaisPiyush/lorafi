@@ -1541,6 +1541,17 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
+name = "uvarint"
+version = "1.2.0"
+description = "Unsigned variable-length integers"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "uvarint-1.2.0-py3-none-any.whl", hash = "sha256:9dcc98ad92b642c57494bed9370c4f93479d2d36223b2c3702823f0aa8b1a9a3"},
+    {file = "uvarint-1.2.0.tar.gz", hash = "sha256:7cc17481c9af8ebe3978f5357412b57ff93ce8b14712236338f782cc8ae9a989"},
+]
+
+[[package]]
 name = "webencodings"
 version = "0.5.1"
 description = "Character encoding aliases for legacy web content"
@@ -1725,4 +1736,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "e6daeaa848c38dce8c3fb95b0f67c1b850256445b62c6a6c6f26cd166c971cb5"
+content-hash = "a3018870489c14d13bce703b0308ae3251b1d227010f8306cd5b2de6e79a4b95"

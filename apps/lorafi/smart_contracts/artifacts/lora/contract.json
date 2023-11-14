@@ -1,0 +1,90 @@
+{
+    "name": "lora",
+    "methods": [
+        {
+            "name": "update_rate",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "rate"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "configure",
+            "args": [
+                {
+                    "type": "application",
+                    "name": "reserve"
+                },
+                {
+                    "type": "asset",
+                    "name": "asset"
+                },
+                {
+                    "type": "account",
+                    "name": "rate_oracle"
+                },
+                {
+                    "type": "asset",
+                    "name": "_pt"
+                },
+                {
+                    "type": "asset",
+                    "name": "_yt"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "mint",
+            "args": [
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "mint_on_command",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "principal_amount"
+                },
+                {
+                    "type": "uint64",
+                    "name": "yield_amount"
+                },
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "burn",
+            "args": [
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        }
+    ],
+    "networks": {}
+}

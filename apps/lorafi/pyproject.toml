@@ -10,6 +10,8 @@ python = "^3.10"
 beaker-pyteal = "^1.1.1"
 algokit-utils = "^2.0.1"
 python-dotenv = "^1.0.0"
+uvarint = "^1.2.0"
+pytest = "^7.4.3"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["d"], version = "*"}

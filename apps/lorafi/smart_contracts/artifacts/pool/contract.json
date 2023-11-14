@@ -1,0 +1,85 @@
+{
+    "name": "pool",
+    "methods": [
+        {
+            "name": "configure",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "name"
+                },
+                {
+                    "type": "asset",
+                    "name": "asset_1"
+                },
+                {
+                    "type": "asset",
+                    "name": "asset_2"
+                }
+            ],
+            "returns": {
+                "type": "uint64"
+            }
+        },
+        {
+            "name": "get_lp_token_asset",
+            "args": [],
+            "returns": {
+                "type": "uint64"
+            }
+        },
+        {
+            "name": "deposit",
+            "args": [
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "burn",
+            "args": [
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "swap_quote",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "asset_amount"
+                },
+                {
+                    "type": "uint64",
+                    "name": "asset_id"
+                }
+            ],
+            "returns": {
+                "type": "uint64"
+            }
+        },
+        {
+            "name": "swap",
+            "args": [
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        }
+    ],
+    "networks": {}
+}

@@ -11,10 +11,10 @@
     "**/__pycache__": true,
     ".idea": true
   },
-  
+
   // TypeScript
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  
+
   // Python
   "python.analysis.extraPaths": ["${workspaceFolder}/smart_contracts"],
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
@@ -28,8 +28,9 @@
   },
   "python.testing.pytestEnabled": true,
   "python.formatting.provider": "black",
-  
+
   // On Windows, if execution policy is set to Signed (default) then it won't be able to activate the venv
   //  so instead let's set it to RemoteSigned for VS Code terminal
   "terminal.integrated.shellArgs.windows": ["-ExecutionPolicy", "RemoteSigned"],
+  "cSpell.words": ["pyteal"]
 }

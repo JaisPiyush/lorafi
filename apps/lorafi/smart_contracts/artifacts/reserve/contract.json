@@ -1,0 +1,146 @@
+{
+    "name": "reserve",
+    "methods": [
+        {
+            "name": "set_portal_asset_data",
+            "args": [
+                {
+                    "type": "asset",
+                    "name": "asset"
+                },
+                {
+                    "type": "account",
+                    "name": "commander"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "set_market_token",
+            "args": [
+                {
+                    "type": "asset",
+                    "name": "principal_token"
+                },
+                {
+                    "type": "asset",
+                    "name": "yield_token"
+                },
+                {
+                    "type": "account",
+                    "name": "commander"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "set_usdt_token",
+            "args": [
+                {
+                    "type": "asset",
+                    "name": "asset"
+                },
+                {
+                    "type": "account",
+                    "name": "commander"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "create_asa",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "name"
+                },
+                {
+                    "type": "string",
+                    "name": "unit_name"
+                },
+                {
+                    "type": "string",
+                    "name": "url"
+                }
+            ],
+            "returns": {
+                "type": "uint64"
+            }
+        },
+        {
+            "name": "mint_yield_token_pair",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "principal_amount"
+                },
+                {
+                    "type": "uint64",
+                    "name": "yield_amount"
+                },
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "mint_portable_token",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "amount"
+                },
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "mint_usdt_token",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "amount"
+                },
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "mint_usdt_on_command",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "amount"
+                },
+                {
+                    "type": "account",
+                    "name": "to"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        }
+    ],
+    "networks": {}
+}

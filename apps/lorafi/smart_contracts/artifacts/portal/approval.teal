@@ -1,0 +1,263 @@
+#pragma version 8
+intcblock 0 1 6
+bytecblock 0x 0x726573657276655f6964 0x61737365745f6964 0x636f72655f6170705f6964 0x73746f726167655f6163636f756e74
+txn NumAppArgs
+intc_0 // 0
+==
+bnz main_l6
+txna ApplicationArgs 0
+pushbytes 0x1bf169e1 // "configure(uint64,address,uint64,uint64)void"
+==
+bnz main_l5
+txna ApplicationArgs 0
+pushbytes 0x903f4535 // "portal_transfer(byte[])byte[]"
+==
+bnz main_l4
+err
+main_l4:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub portaltransfercaster_4
+intc_1 // 1
+return
+main_l5:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub configurecaster_3
+intc_1 // 1
+return
+main_l6:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l8
+err
+main_l8:
+txn ApplicationID
+intc_0 // 0
+==
+assert
+intc_1 // 1
+return
+
+// _mint
+mint_0:
+proto 2 0
+itxn_begin
+intc_2 // appl
+itxn_field TypeEnum
+bytec_1 // "reserve_id"
+app_global_get
+itxn_field ApplicationID
+frame_dig -1
+itxn_field Accounts
+pushbytes 0x2db83734 // "mint_portable_token(uint64,account)void"
+itxn_field ApplicationArgs
+frame_dig -2
+itob
+itxn_field ApplicationArgs
+pushbytes 0x01 // 0x01
+itxn_field ApplicationArgs
+bytec_2 // "asset_id"
+app_global_get
+itxn_field Assets
+itxn_submit
+retsub
+
+// configure
+configure_1:
+proto 4 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+intc_0 // 0
+bytec_3 // "core_app_id"
+app_global_get_ex
+store 1
+store 0
+load 1
+!
+assert
+bytec_3 // "core_app_id"
+frame_dig -4
+app_global_put
+intc_0 // 0
+bytec 4 // "storage_account"
+app_global_get_ex
+store 3
+store 2
+load 3
+!
+assert
+bytec 4 // "storage_account"
+frame_dig -3
+app_global_put
+bytec_2 // "asset_id"
+frame_dig -2
+app_global_put
+bytec_1 // "reserve_id"
+frame_dig -1
+app_global_put
+retsub
+
+// portal_transfer
+portaltransfer_2:
+proto 1 1
+bytec_0 // ""
+intc_0 // 0
+dupn 5
+bytec_0 // ""
+intc_0 // 0
+dupn 2
+bytec_0 // ""
+dup
+intc_0 // 0
+bytec_0 // ""
+intc_0 // 0
+bytec_0 // ""
+dupn 2
+frame_dig -1
+extract 2 0
+intc_0 // 0
+getbyte
+frame_bury 1
+frame_dig -1
+extract 2 0
+intc_1 // 1
+extract_uint32
+frame_bury 2
+frame_dig -1
+extract 2 0
+pushint 5 // 5
+getbyte
+frame_bury 3
+frame_dig -1
+extract 2 0
+intc_2 // 6
+frame_dig 3
+pushint 66 // 66
+*
++
+dig 1
+len
+substring3
+store 4
+load 4
+intc_0 // 0
+extract_uint32
+frame_bury 4
+load 4
+pushint 4 // 4
+extract_uint32
+frame_bury 5
+load 4
+pushint 8 // 8
+extract_uint16
+frame_bury 6
+load 4
+extract 10 32
+frame_bury 7
+load 4
+pushint 42 // 42
+extract_uint64
+frame_bury 8
+load 4
+pushint 50 // 50
+getbyte
+frame_bury 9
+load 4
+pushint 51 // 51
+getbyte
+frame_bury 10
+load 4
+extract 52 32
+frame_bury 11
+load 4
+extract 84 32
+frame_bury 12
+load 4
+pushint 116 // 116
+extract_uint16
+frame_bury 13
+load 4
+extract 118 32
+frame_bury 14
+load 4
+pushint 150 // 150
+extract_uint16
+frame_bury 15
+load 4
+extract 152 32
+frame_bury 16
+load 4
+extract 184 32
+frame_bury 17
+load 4
+extract 216 0
+frame_bury 18
+frame_dig 18
+len
+itob
+extract 6 0
+frame_dig 18
+concat
+frame_bury 18
+frame_dig 11
+frame_dig 17
+callsub mint_0
+retsub
+
+// configure_caster
+configurecaster_3:
+proto 0 0
+intc_0 // 0
+bytec_0 // ""
+intc_0 // 0
+dup
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+txna ApplicationArgs 2
+frame_bury 1
+txna ApplicationArgs 3
+btoi
+frame_bury 2
+txna ApplicationArgs 4
+btoi
+frame_bury 3
+frame_dig 0
+frame_dig 1
+frame_dig 2
+frame_dig 3
+callsub configure_1
+retsub
+
+// portal_transfer_caster
+portaltransfercaster_4:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub portaltransfer_2
+frame_bury 0
+pushbytes 0x151f7c75 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub

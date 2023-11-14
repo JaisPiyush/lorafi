@@ -4,9 +4,12 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "dev:web": "dotenv -- turbo run dev --filter=web"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.1",
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8.48.0",
     "prettier": "^3.0.3",
     "tsconfig": "*",
@@ -17,5 +20,12 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@algorandfoundation/algokit-utils": "^4.1.0",
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@reduxjs/toolkit": "^1.9.7",
+    "crypto-js": "^4.2.0",
+    "react-redux": "^8.1.3"
+  }
 }
