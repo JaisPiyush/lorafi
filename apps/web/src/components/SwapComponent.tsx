@@ -7,6 +7,8 @@ import { Stack } from '@mui/material';
 import CustomDropdownInput from './CustomDropdownInput';
 import { useState } from 'react';
 import { Tokens, poolAssets, tokensRecord } from '../constant';
+import { useAppDispatch } from '../hooks/store';
+import { globalActions } from '../store/global';
 
 
 const getAssetOut = (token: Tokens) => {
@@ -41,12 +43,27 @@ function SwapComponent() {
   const [assetInAmount, setAssetInAmount] = useState('0');
   const [assetOutAmount, setAssetOutAmount] = useState('0');
 
-  const handleOnSwap = () => {}
+  const dispatch = useAppDispatch()
+
+  const handleOnSwap = () => {
+    dispatch(globalActions.setAlert({
+      msg: 'insufficient balance',
+      type: 'error'
+    }))
+  }
 
   const onFlipClick = () => {
     // const _assetOut = assetIn
     // setAssetIn(assetOut);
     // setAssetOut(_assetOut)
+  }
+
+  const handleOnInput = (t: string) => {
+    setAssetInAmount(t);
+    dispatch(globalActions.setAlert({
+      msg: 'insufficient balance',
+      type: 'error'
+    }))
   }
 
 
@@ -62,7 +79,7 @@ function SwapComponent() {
               style={{ width: "100%" }} 
               options={getAssetIn()}   
               amount={assetInAmount}
-              onInput={setAssetInAmount}
+              onInput={handleOnInput}
               disabled={false}
             />
           </Stack>

@@ -9,6 +9,8 @@ import { useState } from 'react';
 import CustomWalletDetailComponent from './CustomWalletDetailComponent';
 import { chainsRecord, Chains, tokensRecord, Tokens } from '../constant';
 import { useSDK } from '@metamask/sdk-react';
+import { useAppDispatch } from '../hooks/store';
+import { globalActions } from '../store/global';
 
 //TODO(fix): Implement MyAlgoAccount Provider
 //TODO(feat): Add functionality to PORT button 
@@ -29,6 +31,17 @@ function PortalComponet() {
   
   const { sdk, connected} = useSDK();
   const [address, setAddress] = useState<string>(sdk?.activeProvider?.selectedAddress || '')
+  const dispatch = useAppDispatch()
+
+  const handleInput = (t: string) => {
+    setAmount(t)
+    if (address) {
+      dispatch(globalActions.setAlert({
+        msg: 'insufficient balance',
+        type: 'error'
+      }))
+    }
+  }
 
 
   const handleOnConnectWallet = async () => {
@@ -69,7 +82,7 @@ function PortalComponet() {
               avatarSrc={aDai.url}
               label={aDai.symbol}
               placeholder='0'
-              onInput={setAmount}
+              onInput={handleInput}
               value={amount}
             />
           </Stack>
