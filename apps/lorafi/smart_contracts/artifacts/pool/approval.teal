@@ -233,8 +233,6 @@ itxn_field TypeEnum
 bytec 5 // "lp_asset_id"
 app_global_get
 itxn_field XferAsset
-global CurrentApplicationAddress
-itxn_field Sender
 frame_dig -2
 itxn_field AssetReceiver
 frame_dig -1
@@ -256,8 +254,6 @@ intc_2 // axfer
 itxn_field TypeEnum
 frame_dig -3
 itxn_field XferAsset
-global CurrentApplicationAddress
-itxn_field Sender
 frame_dig -2
 itxn_field AssetReceiver
 frame_dig -1

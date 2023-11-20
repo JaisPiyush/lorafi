@@ -24,15 +24,18 @@ export enum Tokens {
 
 export const algorandAppId = {
     "Pool" : 477943147,
-    'Reserve' : 477720436,
-    'aDAI' : 477724139,
-    'PT_aDAI' : 477727521,
-    'YT_aDAI' : 477729192,
+    'Reserve' :480793896,
+    'aDAI' : 480838208,
+    'PT_aDAI' : 480838351,
+    'YT_aDAI' : 480838406,
     'USDT' : 477748394,
-    'Lora' : 477813452
+    'Lora' : 480816361
 
 } as const;
 
+export const appAddress = {
+    'Lora': "ROXVY7LRU2CXNFOCVZZRWO37N7AT46RSSUOGFXK3GCBONQYSPHOSGF7WNM"
+} as const
 // export const pools = {
     
 // }

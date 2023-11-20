@@ -9,8 +9,10 @@ import { useState } from 'react';
 import CustomWalletDetailComponent from './CustomWalletDetailComponent';
 import { chainsRecord, Chains, tokensRecord, Tokens } from '../constant';
 import { useSDK } from '@metamask/sdk-react';
-import { useAppDispatch } from '../hooks/store';
+import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { globalActions } from '../store/global';
+import { mintADaiTokens } from '../contract_calls/reserve';
+import { useMyAlgoConnect } from '../hooks/useMyAlgoConnect';
 
 //TODO(fix): Implement MyAlgoAccount Provider
 //TODO(feat): Add functionality to PORT button 
@@ -31,24 +33,31 @@ function PortalComponet() {
   
   const { sdk, connected} = useSDK();
   const [address, setAddress] = useState<string>(sdk?.activeProvider?.selectedAddress || '')
+  const [algoAddress] = useAppSelector(state => [state.account.address || ''])
   const dispatch = useAppDispatch()
+  const myAlgoConnect = useMyAlgoConnect();
 
   const handleInput = (t: string) => {
     setAmount(t)
-    if (address) {
-      dispatch(globalActions.setAlert({
-        msg: 'insufficient balance',
-        type: 'error'
-      }))
-    }
+    // if (address) {
+    //   dispatch(globalActions.setAlert({
+    //     msg: 'insufficient balance',
+    //     type: 'error'
+    //   }))
+    // }
   }
 
 
   const handleOnConnectWallet = async () => {
     try {
-      const accounts = (await sdk?.connect()) as string[];
-      // console.log(accounts)
-      setAddress(accounts[0]);
+      // const accounts = (await sdk?.connect()) as string[];
+      // // console.log(accounts)
+      // setAddress(accounts[0]);.
+      await mintADaiTokens(algoAddress, myAlgoConnect, parseInt(amount))
+      dispatch(globalActions.setAlert({
+        msg: 'Txn successful',
+        type: 'success'
+      }))
     } catch(err) {
       console.warn(`failed to connect..`, err);
     }

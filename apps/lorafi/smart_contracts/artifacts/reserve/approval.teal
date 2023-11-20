@@ -1,43 +1,51 @@
 #pragma version 8
 intcblock 0 1 4
-bytecblock 0x757364745f746f6b656e5f6964 0x757364745f746f6b656e5f636f6d6d616e646572 0x706f727461626c655f61737365745f6964 0x706f7274616c5f61737365745f636f6d6d616e646572 0x7072696e636970616c5f746f6b656e5f6964 0x7969656c645f746f6b656e5f6964 0x6d61726b65745f746f6b656e5f636f6d6d616e646572
+bytecblock 0x706f7274616c5f61737365745f636f6d6d616e646572 0x6d61726b65745f746f6b656e5f636f6d6d616e646572 0x757364745f746f6b656e5f636f6d6d616e646572
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l18
+bnz main_l16
 txna ApplicationArgs 0
 pushbytes 0x8f02f1a7 // "set_portal_asset_data(asset,account)void"
 ==
-bnz main_l17
+bnz main_l15
 txna ApplicationArgs 0
 pushbytes 0x1a1b8e94 // "set_market_token(asset,asset,account)void"
 ==
-bnz main_l16
+bnz main_l14
 txna ApplicationArgs 0
 pushbytes 0x6c3c7e55 // "set_usdt_token(asset,account)void"
 ==
-bnz main_l15
+bnz main_l13
 txna ApplicationArgs 0
 pushbytes 0x058a806a // "create_asa(string,string,string)uint64"
 ==
-bnz main_l14
-txna ApplicationArgs 0
-pushbytes 0x06307dee // "mint_yield_token_pair(uint64,uint64,account)void"
-==
-bnz main_l13
-txna ApplicationArgs 0
-pushbytes 0x2db83734 // "mint_portable_token(uint64,account)void"
-==
 bnz main_l12
 txna ApplicationArgs 0
-pushbytes 0x7f4739bc // "mint_usdt_token(uint64,account)void"
+pushbytes 0xe83eda3f // "mint_yield_token_pair(uint64,uint64,account,asset,asset)void"
 ==
 bnz main_l11
 txna ApplicationArgs 0
-pushbytes 0xcfce1157 // "mint_usdt_on_command(uint64,account)void"
+pushbytes 0x930181ab // "mint_portable_token(uint64,account,asset)void"
 ==
 bnz main_l10
+txna ApplicationArgs 0
+pushbytes 0x4190a132 // "mint_usdt_token(uint64,account,asset)void"
+==
+bnz main_l9
 err
+main_l9:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub mintusdttokencaster_14
+intc_1 // 1
+return
 main_l10:
 txn OnCompletion
 intc_0 // NoOp
@@ -47,7 +55,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub mintusdtoncommandcaster_16
+callsub mintportabletokencaster_13
 intc_1 // 1
 return
 main_l11:
@@ -59,7 +67,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub mintusdttokencaster_15
+callsub mintyieldtokenpaircaster_12
 intc_1 // 1
 return
 main_l12:
@@ -71,7 +79,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub mintportabletokencaster_14
+callsub createasacaster_11
 intc_1 // 1
 return
 main_l13:
@@ -83,7 +91,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub mintyieldtokenpaircaster_13
+callsub setusdttokencaster_10
 intc_1 // 1
 return
 main_l14:
@@ -95,7 +103,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub createasacaster_12
+callsub setmarkettokencaster_9
 intc_1 // 1
 return
 main_l15:
@@ -107,40 +115,16 @@ intc_0 // 0
 !=
 &&
 assert
-callsub setusdttokencaster_11
+callsub setportalassetdatacaster_8
 intc_1 // 1
 return
 main_l16:
 txn OnCompletion
 intc_0 // NoOp
 ==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub setmarkettokencaster_10
-intc_1 // 1
-return
-main_l17:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub setportalassetdatacaster_9
-intc_1 // 1
-return
-main_l18:
-txn OnCompletion
-intc_0 // NoOp
-==
-bnz main_l20
+bnz main_l18
 err
-main_l20:
+main_l18:
 txn ApplicationID
 intc_0 // 0
 ==
@@ -156,11 +140,11 @@ global CreatorAddress
 ==
 // unauthorized
 assert
-bytec_2 // "portable_asset_id"
+pushbytes 0x706f727461626c655f61737365745f6964 // "portable_asset_id"
 frame_dig -2
 txnas Assets
 app_global_put
-bytec_3 // "portal_asset_commander"
+bytec_0 // "portal_asset_commander"
 frame_dig -1
 txnas Accounts
 app_global_put
@@ -174,15 +158,15 @@ global CreatorAddress
 ==
 // unauthorized
 assert
-bytec 4 // "principal_token_id"
+pushbytes 0x7072696e636970616c5f746f6b656e5f6964 // "principal_token_id"
 frame_dig -3
 txnas Assets
 app_global_put
-bytec 5 // "yield_token_id"
+pushbytes 0x7969656c645f746f6b656e5f6964 // "yield_token_id"
 frame_dig -2
 txnas Assets
 app_global_put
-bytec 6 // "market_token_commander"
+bytec_1 // "market_token_commander"
 frame_dig -1
 txnas Accounts
 app_global_put
@@ -196,11 +180,11 @@ global CreatorAddress
 ==
 // unauthorized
 assert
-bytec_0 // "usdt_token_id"
+pushbytes 0x757364745f746f6b656e5f6964 // "usdt_token_id"
 frame_dig -2
 txnas Assets
 app_global_put
-bytec_1 // "usdt_token_commander"
+bytec_2 // "usdt_token_commander"
 frame_dig -1
 txnas Accounts
 app_global_put
@@ -268,8 +252,6 @@ frame_dig -3
 itxn_field XferAsset
 frame_dig -1
 itxn_field AssetAmount
-global CurrentApplicationAddress
-itxn_field Sender
 frame_dig -2
 txnas Accounts
 itxn_field AssetReceiver
@@ -278,80 +260,59 @@ retsub
 
 // mint_yield_token_pair
 mintyieldtokenpair_5:
-proto 3 0
+proto 5 0
 txn Sender
-bytec 6 // "market_token_commander"
+bytec_1 // "market_token_commander"
 app_global_get
 ==
 // Cannot mint token
 assert
-bytec 4 // "principal_token_id"
-app_global_get
-frame_dig -1
-frame_dig -3
-callsub asamintinnertxn_4
-bytec 5 // "yield_token_id"
-app_global_get
-frame_dig -1
 frame_dig -2
+txnas Assets
+frame_dig -3
+frame_dig -5
+callsub asamintinnertxn_4
+frame_dig -1
+txnas Assets
+frame_dig -3
+frame_dig -4
 callsub asamintinnertxn_4
 retsub
 
 // mint_portable_token
 mintportabletoken_6:
-proto 2 0
+proto 3 0
 txn Sender
-bytec_3 // "portal_asset_commander"
+bytec_0 // "portal_asset_commander"
 app_global_get
 ==
 // cannot mint token
 assert
-bytec_2 // "portable_asset_id"
-app_global_get
 frame_dig -1
+txnas Assets
 frame_dig -2
+frame_dig -3
 callsub asamintinnertxn_4
 retsub
 
 // mint_usdt_token
 mintusdttoken_7:
-proto 2 0
+proto 3 0
 txn Sender
-bytec_1 // "usdt_token_commander"
+bytec_2 // "usdt_token_commander"
 app_global_get
 ==
 // cannot mint token
 assert
-bytec_0 // "usdt_token_id"
-app_global_get
 frame_dig -1
+txnas Assets
 frame_dig -2
-callsub asamintinnertxn_4
-retsub
-
-// mint_usdt_on_command
-mintusdtoncommand_8:
-proto 2 0
-txn Sender
-global CreatorAddress
-==
-// unauthorized
-assert
-txn Sender
-bytec_1 // "usdt_token_commander"
-app_global_get
-==
-// cannot mint token
-assert
-bytec_0 // "usdt_token_id"
-app_global_get
-frame_dig -1
-frame_dig -2
+frame_dig -3
 callsub asamintinnertxn_4
 retsub
 
 // set_portal_asset_data_caster
-setportalassetdatacaster_9:
+setportalassetdatacaster_8:
 proto 0 0
 intc_0 // 0
 dup
@@ -369,7 +330,7 @@ callsub setportalassetdata_0
 retsub
 
 // set_market_token_caster
-setmarkettokencaster_10:
+setmarkettokencaster_9:
 proto 0 0
 intc_0 // 0
 dupn 2
@@ -392,7 +353,7 @@ callsub setmarkettoken_1
 retsub
 
 // set_usdt_token_caster
-setusdttokencaster_11:
+setusdttokencaster_10:
 proto 0 0
 intc_0 // 0
 dup
@@ -410,7 +371,7 @@ callsub setusdttoken_2
 retsub
 
 // create_asa_caster
-createasacaster_12:
+createasacaster_11:
 proto 0 0
 intc_0 // 0
 pushbytes 0x // ""
@@ -434,10 +395,10 @@ log
 retsub
 
 // mint_yield_token_pair_caster
-mintyieldtokenpaircaster_13:
+mintyieldtokenpaircaster_12:
 proto 0 0
 intc_0 // 0
-dupn 2
+dupn 4
 txna ApplicationArgs 1
 btoi
 frame_bury 0
@@ -448,17 +409,27 @@ txna ApplicationArgs 3
 intc_0 // 0
 getbyte
 frame_bury 2
+txna ApplicationArgs 4
+intc_0 // 0
+getbyte
+frame_bury 3
+txna ApplicationArgs 5
+intc_0 // 0
+getbyte
+frame_bury 4
 frame_dig 0
 frame_dig 1
 frame_dig 2
+frame_dig 3
+frame_dig 4
 callsub mintyieldtokenpair_5
 retsub
 
 // mint_portable_token_caster
-mintportabletokencaster_14:
+mintportabletokencaster_13:
 proto 0 0
 intc_0 // 0
-dup
+dupn 2
 txna ApplicationArgs 1
 btoi
 frame_bury 0
@@ -466,16 +437,21 @@ txna ApplicationArgs 2
 intc_0 // 0
 getbyte
 frame_bury 1
+txna ApplicationArgs 3
+intc_0 // 0
+getbyte
+frame_bury 2
 frame_dig 0
 frame_dig 1
+frame_dig 2
 callsub mintportabletoken_6
 retsub
 
 // mint_usdt_token_caster
-mintusdttokencaster_15:
+mintusdttokencaster_14:
 proto 0 0
 intc_0 // 0
-dup
+dupn 2
 txna ApplicationArgs 1
 btoi
 frame_bury 0
@@ -483,24 +459,12 @@ txna ApplicationArgs 2
 intc_0 // 0
 getbyte
 frame_bury 1
+txna ApplicationArgs 3
+intc_0 // 0
+getbyte
+frame_bury 2
 frame_dig 0
 frame_dig 1
+frame_dig 2
 callsub mintusdttoken_7
-retsub
-
-// mint_usdt_on_command_caster
-mintusdtoncommandcaster_16:
-proto 0 0
-intc_0 // 0
-dup
-txna ApplicationArgs 1
-btoi
-frame_bury 0
-txna ApplicationArgs 2
-intc_0 // 0
-getbyte
-frame_bury 1
-frame_dig 0
-frame_dig 1
-callsub mintusdtoncommand_8
 retsub

@@ -39,10 +39,6 @@ export function mapStateValue(
 
 export const getSigner = (myAlgoConnect: MyAlgoConnect): TransactionSigner => {
     return async (txnGroup, indexesToSign) => {
-        const signed: Uint8Array[] = [];
-        for (const index of indexesToSign) {
-            signed.push((await myAlgoConnect.signTransaction(txnGroup[index].toByte())).blob)
-        }
-        return signed
+        return (await myAlgoConnect.signTransaction(indexesToSign.map((i) => txnGroup[i].toByte()))).map((sig) => sig.blob)
     }
 }

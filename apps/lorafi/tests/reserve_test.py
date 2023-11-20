@@ -113,8 +113,9 @@ def test_mint_portable_token(
         reserve_contract.mint_portable_token,
         amount=10,
         to=signer.address,
+        asset=state["portable_asset_id"],
         transaction_parameters={
-            "accounts": [signer.address],
+            # "accounts": [signer.address],
             "foreign_assets": [state["portable_asset_id"]],
         },
     )

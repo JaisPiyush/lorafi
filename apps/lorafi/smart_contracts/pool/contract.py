@@ -136,7 +136,7 @@ def _mint(address: Expr, amount: Expr) -> Expr:
             {
                 TxnField.type_enum: TxnType.AssetTransfer,
                 TxnField.xfer_asset: app.state.lp_asset_id.get(),
-                TxnField.sender: pt.Global.current_application_address(),
+                # TxnField.sender: pt.Global.current_application_address(),
                 TxnField.asset_receiver: address,
                 TxnField.asset_amount: amount,
             }
@@ -152,7 +152,7 @@ def _transfer(asset: Expr, address: Expr, amount: Expr) -> Expr:
             {
                 TxnField.type_enum: TxnType.AssetTransfer,
                 TxnField.xfer_asset: asset,
-                TxnField.sender: pt.Global.current_application_address(),
+                # TxnField.sender: pt.Global.current_application_address(),
                 TxnField.asset_receiver: address,
                 TxnField.asset_amount: amount,
             }

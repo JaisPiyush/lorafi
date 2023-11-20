@@ -87,6 +87,14 @@
                 {
                     "type": "account",
                     "name": "to"
+                },
+                {
+                    "type": "asset",
+                    "name": "pt_asset"
+                },
+                {
+                    "type": "asset",
+                    "name": "yt_asset"
                 }
             ],
             "returns": {
@@ -103,6 +111,10 @@
                 {
                     "type": "account",
                     "name": "to"
+                },
+                {
+                    "type": "asset",
+                    "name": "asset"
                 }
             ],
             "returns": {
@@ -119,22 +131,10 @@
                 {
                     "type": "account",
                     "name": "to"
-                }
-            ],
-            "returns": {
-                "type": "void"
-            }
-        },
-        {
-            "name": "mint_usdt_on_command",
-            "args": [
-                {
-                    "type": "uint64",
-                    "name": "amount"
                 },
                 {
-                    "type": "account",
-                    "name": "to"
+                    "type": "asset",
+                    "name": "asset"
                 }
             ],
             "returns": {

@@ -25,14 +25,16 @@ export const mintADaiTokens = async (
             name: 'mint_portable_token',
             args: [
                 {type: 'uint64'},
-                {type: 'account'}
+                {type: 'account'},
+                {type: 'asset'}
             ],
             returns: {type: 'void'}
         }),
         sender: address,
         methodArgs: [
             amount, 
-            address
+            address,
+            algorandAppId['aDAI']
         ],
         suggestedParams: suggestedParams,
         appAccounts: [address],

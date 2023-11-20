@@ -99,7 +99,7 @@ def asa_mint_inner_txn(
             TxnField.type_enum: TxnType.AssetTransfer,
             TxnField.xfer_asset: asset_id,
             TxnField.asset_amount: amount.get(),
-            TxnField.sender: pt.Global.current_application_address(),
+            # TxnField.sender: pt.Global.current_application_address(),
             TxnField.asset_receiver: receiver.address(),
         }
     )
@@ -107,46 +107,39 @@ def asa_mint_inner_txn(
 
 @app.external
 def mint_yield_token_pair(
-    principal_amount: abi.Uint64, yield_amount: abi.Uint64, to: abi.Account
+    principal_amount: abi.Uint64,
+    yield_amount: abi.Uint64,
+    to: abi.Account,
+    pt_asset: abi.Asset,
+    yt_asset: abi.Asset,
 ):
     return pt.Seq(
         pt.Assert(
             pt.Txn.sender() == app.state.market_token_commander.get(),
             comment="Cannot mint token",
         ),
-        asa_mint_inner_txn(app.state.principal_token_id.get(), to, principal_amount),
-        asa_mint_inner_txn(app.state.yield_token_id.get(), to, yield_amount),
+        asa_mint_inner_txn(pt_asset.asset_id(), to, principal_amount),
+        asa_mint_inner_txn(yt_asset.asset_id(), to, yield_amount),
     )
 
 
 @app.external
-def mint_portable_token(amount: abi.Uint64, to: abi.Account):
+def mint_portable_token(amount: abi.Uint64, to: abi.Account, asset: abi.Asset):
     return pt.Seq(
         pt.Assert(
             pt.Txn.sender() == app.state.portal_asset_commander.get(),
             comment="cannot mint token",
         ),
-        asa_mint_inner_txn(app.state.portable_asset_id.get(), to, amount),
+        asa_mint_inner_txn(asset.asset_id(), to, amount),
     )
 
 
 @app.external
-def mint_usdt_token(amount: abi.Uint64, to: abi.Account):
+def mint_usdt_token(amount: abi.Uint64, to: abi.Account, asset: abi.Asset):
     return pt.Seq(
         pt.Assert(
             pt.Txn.sender() == app.state.usdt_token_commander.get(),
             comment="cannot mint token",
         ),
-        asa_mint_inner_txn(app.state.usdt_token_id.get(), to, amount),
-    )
-
-
-@app.external(authorize=beaker.Authorize.only_creator())
-def mint_usdt_on_command(amount: abi.Uint64, to: abi.Account):
-    return pt.Seq(
-        pt.Assert(
-            pt.Txn.sender() == app.state.usdt_token_commander.get(),
-            comment="cannot mint token",
-        ),
-        asa_mint_inner_txn(app.state.usdt_token_id.get(), to, amount),
+        asa_mint_inner_txn(asset.asset_id(), to, amount),
     )

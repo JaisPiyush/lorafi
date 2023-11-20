@@ -9,9 +9,10 @@ import { useEffect, useState } from 'react';
 import { useMyAlgoConnect } from '../hooks/useMyAlgoConnect';
 
 import { useAppDispatch, useAppSelector } from '../hooks/store';
-import { accountActions } from '../store/account';
-import { mintYieldTokens } from '../contract_calls/lora';
+
+import { burnYieldTokens, mintYieldTokens } from '../contract_calls/lora';
 import { globalActions } from '../store/global';
+import { ArrowUpward } from '@mui/icons-material';
 // import { getGlobalStateOfPool } from '../contract_calls/pool';
 
 function MintComponet() {
@@ -19,6 +20,7 @@ function MintComponet() {
   const ptADai = tokensRecord[Tokens.PT_aDai];
   const ytADai = tokensRecord[Tokens.YT_aDai];
   const [amountIn, setAmountIn] = useState<string>('0');
+  const [toYieldToken, setToYieldToken] = useState<boolean>(true)
   // const [ptAmountOut, setPtAmountOut] = useState<string>('0');
   // const [ytAmountOut, setYtAmountOut] = useState<string>('0');
 
@@ -28,41 +30,81 @@ function MintComponet() {
 
   useEffect(() => {
     if (!isConnected) {
-      myAlgoConnect.connect().then((acc): void => {
-        dispatch(accountActions.setAddress(acc[0].address))
-      });
+      // myAlgoConnect.connect().then((acc): void => {
+      //   dispatch(accountActions.setAddress(acc[0].address))
+      // });
     }
   }, [isConnected])
 
   const myAlgoConnect = useMyAlgoConnect();
 
   const getPtAmountOut = () => {
-    return (parseInt(amountIn || '0') * (1-0.0228)).toString()
+    if (!toYieldToken) {
+      return amountIn;
+    }
+    return parseInt((parseInt(amountIn || '0') * (1-0.025)).toString()).toString()
   }
 
   const getYtAmountOut = () => {
-    return (parseInt(amountIn || '0') * 0.0228).toString()
+    return parseInt((parseInt(amountIn || '0') * 0.025).toString()).toString()
   }
 
   
   const mint = async () => { 
     if (parseInt(amountIn) > 0 && address) {
-      // await mintYieldTokens(
-      //   address as string,
-      //   myAlgoConnect,
-      //   parseInt(amountIn)
-      // );
+      await mintYieldTokens(
+        address as string,
+        myAlgoConnect,
+        parseInt(amountIn)
+      );
       dispatch(globalActions.setAlert({
-        msg: 'insufficient balance',
-        type: 'error'
+        msg: 'minting successful',
+        type: 'success'
       }))
     }
 
   
   }
 
+  const burn = async () => {
+    if (parseInt(amountIn) > 0 && address) {
+      await burnYieldTokens(
+        address as string,
+        myAlgoConnect,
+        parseInt(amountIn)
+      );
+      dispatch(globalActions.setAlert({
+        msg: 'converted',
+        type: 'success'
+      }))
+    }
+  }
+
   const handleOnAmountInput = (s: string) => {
     setAmountIn(s)
+  }
+
+  const getaDaiAmount = () => {
+    if (toYieldToken) {
+      return amountIn;
+    }
+    const yt = parseInt(((parseInt(amountIn) * 0.0025)/ (1-0.0025)).toString());
+    return (yt  + parseInt(amountIn)).toString()
+  }
+
+  const handleOnBtnClick = async () => {
+    try {
+      if (toYieldToken) {
+        await mint()
+      } else {
+        await burn()
+      }
+    } catch (e) {
+      dispatch(globalActions.setAlert({
+        msg: 'unknown error in txn',
+        type: 'error'
+      }))
+    }
   }
 
   return (
@@ -73,22 +115,24 @@ function MintComponet() {
             <CustomInputComponent
               avatarSrc={aDai.url}
               label={aDai.symbol}
-              value={amountIn}
+              value={getaDaiAmount()}
               onInput={handleOnAmountInput}
               placeholder='Enter amount'
+              disabled={!toYieldToken}
             />
           </Stack>
           <Stack direction="row" sx={{ width: "100%", justifyContent: "center" }}>
-            <IconButton color="primary">
-              <ArrowDownwardIcon />
+            <IconButton color="primary" onClick={() => {setToYieldToken(!toYieldToken)}}>
+              {toYieldToken ? <ArrowDownwardIcon />: <ArrowUpward />}
             </IconButton>
           </Stack>
           <Stack direction="row" sx={{ display: 'flex', width: "100%", alignItems: 'center', justifyContent: 'space-between' }}>
             <CustomInputComponent
               avatarSrc={ptADai.url}
               label={ptADai.symbol}
-              disabled={true}
+              disabled={toYieldToken}
               value={getPtAmountOut()}
+              onInput={handleOnAmountInput}
             />
           </Stack>
           <Stack direction="row" sx={{ display: 'flex', width: "100%", alignItems: 'center', justifyContent: 'space-between' }}>
@@ -100,8 +144,8 @@ function MintComponet() {
             />
           </Stack>
           <Stack sx={{}}>
-            <Button onClick={() => {mint()}} variant="contained" color="primary" >
-              Mint
+            <Button onClick={() => {handleOnBtnClick()}} variant="contained" color="primary" >
+              {toYieldToken ? 'Mint': 'Redeem'}
             </Button>
           </Stack>
         </Stack>

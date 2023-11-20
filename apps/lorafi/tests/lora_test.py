@@ -139,6 +139,7 @@ def reserve_client(
         reserve_contract.mint_portable_token,
         amount=1000,
         to=signer.address,
+        asset=result.return_value,
         transaction_parameters={
             "foreign_assets": [result.return_value],
             "accounts": [signer.address],

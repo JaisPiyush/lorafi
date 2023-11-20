@@ -82,14 +82,21 @@ def _mint(principal: Expr, yield_amount: Expr, to: abi.Account):
         pt.InnerTxnBuilder.Begin(),
         pt.InnerTxnBuilder.MethodCall(
             app_id=app.state.reserve_id.get(),
-            method_signature="mint_yield_token_pair(uint64,uint64,account)void",
-            args=[pt.Itob(principal), pt.Itob(yield_amount), to],
+            method_signature="mint_yield_token_pair(uint64,uint64,account,asset,asset)void",
+            args=[
+                pt.Itob(principal),
+                pt.Itob(yield_amount),
+                to.address(),
+                app.state.pt_id.get(),
+                app.state.yt_id.get(),
+            ],
             extra_fields={
                 TxnField.assets: [
                     app.state.asset_id.get(),
                     app.state.pt_id.get(),
                     app.state.yt_id.get(),
-                ]
+                ],
+                TxnField.accounts: [to.address()],
             },
         ),
         pt.InnerTxnBuilder.Submit(),

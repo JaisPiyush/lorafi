@@ -1,6 +1,6 @@
 #pragma version 8
 intcblock 0 1 100000
-bytecblock 0x72617465 0x61737365745f6964 0x70745f6964 0x79745f6964 0x726174655f6f7261636c65 0x726573657276655f6964
+bytecblock 0x72617465 0x61737365745f6964 0x70745f6964 0x79745f6964 0x726174655f6f7261636c65 0x726573657276655f6964 0x01
 txn NumAppArgs
 intc_0 // 0
 ==
@@ -198,7 +198,13 @@ itxn_field ApplicationID
 frame_dig -1
 txnas Accounts
 itxn_field Accounts
-pushbytes 0x06307dee // "mint_yield_token_pair(uint64,uint64,account)void"
+bytec_2 // "pt_id"
+app_global_get
+itxn_field Assets
+bytec_3 // "yt_id"
+app_global_get
+itxn_field Assets
+pushbytes 0xe83eda3f // "mint_yield_token_pair(uint64,uint64,account,asset,asset)void"
 itxn_field ApplicationArgs
 frame_dig -3
 itob
@@ -206,7 +212,11 @@ itxn_field ApplicationArgs
 frame_dig -2
 itob
 itxn_field ApplicationArgs
-pushbytes 0x01 // 0x01
+bytec 6 // 0x01
+itxn_field ApplicationArgs
+pushbytes 0x00 // 0x00
+itxn_field ApplicationArgs
+bytec 6 // 0x01
 itxn_field ApplicationArgs
 bytec_1 // "asset_id"
 app_global_get
